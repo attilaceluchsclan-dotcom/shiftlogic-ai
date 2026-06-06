@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftLogic AI — Industrial AI That Understands Machines</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:#0a1e30;color:#fff;min-height:100vh;}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ── NAV ── */
+nav{background:#061525;border-bottom:2px solid #F28C28;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.05em;cursor:pointer;color:#fff;text-decoration:none;}
+.logo span{color:#F28C28;}
+.tagline{font-size:10px;color:#4a7a9b;letter-spacing:.1em;text-transform:uppercase;margin-top:1px;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-user{font-size:12px;color:#7fa8c9;}
+.nav-btn{padding:7px 16px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;border-radius:4px;cursor:pointer;transition:all .12s;border:none;}
+.nav-btn-ghost{color:#c8dde9;background:transparent;border:1px solid #1a3a55;}
+.nav-btn-ghost:hover{border-color:#4a7a9b;}
+.nav-btn-orange{color:#fff;background:#F28C28;}
+.nav-btn-orange:hover{background:#e07d1a;}
+
+/* API KEY BANNER */
+.api-banner{background:#1a0a0a;border-bottom:1px solid #5a1a1a;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#e74c3c;}
+.api-banner a{color:#F28C28;cursor:pointer;text-decoration:underline;margin-left:8px;}
+.api-banner.hidden{display:none;}
+
+/* ══════════════════════════════════════
+   MARKETING PAGE
+══════════════════════════════════════ */
+.hero{padding:80px 40px 70px;background:#0a1e30;position:relative;overflow:hidden;border-bottom:1px solid #1a3a55;}
+.hero-inner{max-width:980px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:56px;align-items:center;}
+.hero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#F28C28;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.hero-eyebrow::before{content:'';display:inline-block;width:24px;height:2px;background:#F28C28;}
+h1.hero-h{font-family:'Barlow Condensed',sans-serif;font-size:62px;font-weight:800;line-height:.98;letter-spacing:-.01em;margin-bottom:24px;}
+h1.hero-h em{font-style:italic;color:#F28C28;display:block;}
+.hero-sub{font-size:16px;line-height:1.8;color:#8fb8d4;margin-bottom:32px;max-width:500px;}
+.hero-sub strong{color:#fff;font-weight:600;}
+.cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.btn-primary{padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:background .12s;}
+.btn-primary:hover{background:#e07d1a;}
+.btn-ghost-m{padding:13px 24px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:.05em;color:#c8dde9;background:transparent;border:1px solid #1a3a55;border-radius:5px;cursor:pointer;transition:all .12s;}
+.btn-ghost-m:hover{border-color:#4a7a9b;color:#fff;}
+.hero-note{font-size:12px;color:#2d5a7a;margin-top:14px;}
+.demo-card{background:#061525;border:1px solid #1a3a55;border-radius:9px;overflow:hidden;}
+.demo-card-bar{background:#0a1e30;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #1a3a55;}
+.dc-dot{width:9px;height:9px;border-radius:50%;}
+.dc-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.1em;color:#4a7a9b;margin-left:4px;text-transform:uppercase;}
+.demo-body{padding:18px;}
+.demo-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;}
+.demo-raw{font-size:13px;font-style:italic;line-height:1.6;color:#d4b896;padding:12px 14px;background:#0a1e30;border-radius:5px;border-left:3px solid #c0392b;margin-bottom:14px;}
+.demo-arrow{text-align:center;color:#F28C28;font-size:20px;font-weight:700;margin:4px 0 12px;}
+.demo-out{font-size:12.5px;line-height:1.65;color:#c8dde9;padding:12px 14px;background:#0a1e30;border-radius:5px;border-left:3px solid #27ae60;}
+.demo-sec{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F28C28;margin-top:10px;margin-bottom:3px;}
+.demo-sec:first-child{margin-top:0;}
+.demo-val{color:#c8dde9;font-size:12.5px;}
+.stats-bar{background:#163A5F;border-top:1px solid #1e4a73;border-bottom:1px solid #1e4a73;padding:24px 40px;}
+.stats-inner{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.stat{text-align:center;padding:10px;}
+.stat-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#F28C28;line-height:1;}
+.stat-label{font-size:12px;color:#7fa8c9;margin-top:4px;letter-spacing:.04em;}
+.msection{padding:60px 40px;}
+.msection-inner{max-width:980px;margin:0 auto;}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#F28C28;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.eyebrow::before{content:'';display:inline-block;width:20px;height:2px;background:#F28C28;}
+h2.sh{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;line-height:1.05;color:#fff;margin-bottom:16px;}
+h2.sh em{font-style:italic;color:#F28C28;}
+.section-sub{font-size:15px;line-height:1.8;color:#8fb8d4;max-width:600px;margin-bottom:36px;}
+.section-sub strong{color:#fff;}
+.problem-sec{background:#061525;border-top:1px solid #1a3a55;border-bottom:1px solid #1a3a55;}
+.problem-quote{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-style:italic;font-weight:700;color:#fff;line-height:1.3;border-left:4px solid #F28C28;padding-left:20px;margin-bottom:32px;max-width:640px;}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.pain-card{background:#0a1e30;border:1px solid #1a3a55;border-radius:7px;padding:22px;}
+.pain-icon{font-size:24px;margin-bottom:10px;}
+.pain-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:.03em;margin-bottom:7px;}
+.pain-text{font-size:13px;line-height:1.65;color:#4a7a9b;}
+.how-sec{background:#0a1e30;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.step{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:24px;position:relative;}
+.step::before{content:attr(data-n);font-family:'Barlow Condensed',sans-serif;font-size:64px;font-weight:800;color:#F28C28;opacity:.12;line-height:1;position:absolute;top:14px;right:18px;}
+.step-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.02em;margin-bottom:10px;}
+.step-text{font-size:13px;line-height:1.7;color:#4a7a9b;}
+.industries-sec{background:#061525;border-top:1px solid #1a3a55;border-bottom:1px solid #1a3a55;}
+.industry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.industry-card{background:#0a1e30;border:1px solid #1a3a55;border-radius:7px;padding:18px 20px;transition:border-color .15s;}
+.industry-card:hover{border-color:#F28C28;}
+.ind-icon{font-size:26px;margin-bottom:10px;}
+.ind-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:.03em;margin-bottom:6px;}
+.ind-systems{font-size:12px;line-height:1.7;color:#4a7a9b;}
+.pitch-sec{background:#163A5F;border-top:2px solid #F28C28;border-bottom:2px solid #F28C28;padding:64px 40px;}
+.pitch-inner{max-width:980px;margin:0 auto;}
+.pitch-h{font-family:'Barlow Condensed',sans-serif;font-size:46px;font-weight:800;color:#fff;line-height:1.05;margin-bottom:28px;}
+.pitch-h em{font-style:italic;color:#F28C28;}
+.pitch-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;}
+.pitch-block{background:#0f2a45;border-radius:7px;padding:22px;border-left:3px solid #F28C28;}
+.pitch-block-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F28C28;margin-bottom:10px;}
+.pitch-block-text{font-size:14px;line-height:1.8;color:#c8dde9;}
+.pitch-close{font-size:15px;line-height:1.85;color:#8fb8d4;border-top:1px solid #1e4a73;padding-top:24px;}
+.pitch-close strong{color:#fff;}
+.pricing-sec{background:#0a1e30;}
+.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:640px;}
+.price-card{background:#061525;border:1px solid #1a3a55;border-radius:9px;padding:28px;position:relative;}
+.price-card.featured{border:2px solid #F28C28;}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#F28C28;color:#fff;padding:4px 14px;border-radius:20px;white-space:nowrap;}
+.price-tier{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a7a9b;margin-bottom:8px;}
+.price-val{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px;}
+.price-val sup{font-size:20px;vertical-align:top;margin-top:8px;}
+.price-period{font-size:12px;color:#4a7a9b;margin-bottom:18px;}
+.price-divider{border:none;border-top:1px solid #1a3a55;margin:18px 0;}
+.price-features{list-style:none;margin-bottom:24px;}
+.price-features li{font-size:13px;color:#8fb8d4;padding:5px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.price-features li::before{content:'✓';color:#F28C28;font-weight:700;flex-shrink:0;margin-top:1px;}
+.price-btn{width:100%;padding:11px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.05em;border-radius:5px;cursor:pointer;transition:all .12s;border:none;}
+.price-btn-ghost{color:#c8dde9;background:transparent;border:1px solid #1a3a55 !important;}
+.price-btn-ghost:hover{border-color:#4a7a9b !important;}
+.price-btn-solid{color:#fff;background:#F28C28;}
+.price-btn-solid:hover{background:#e07d1a;}
+.footer-cta-sec{background:#0a1e30;border-top:1px solid #1a3a55;padding:70px 40px;text-align:center;}
+.footer-cta-h{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:12px;}
+.footer-cta-h em{font-style:italic;color:#F28C28;}
+.footer-cta-sub{font-size:14px;color:#4a7a9b;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.footer-brand{margin-top:36px;padding-top:22px;border-top:1px solid #1a3a55;font-family:'Barlow Condensed',sans-serif;font-size:13px;color:#1e4a73;letter-spacing:.08em;}
+.footer-brand span{color:#F28C28;}
+
+/* ══════════════════════════════════════
+   AUTH SCREENS
+══════════════════════════════════════ */
+.auth-wrap{min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.auth-card{background:#061525;border:1px solid #1a3a55;border-radius:10px;padding:36px;width:100%;max-width:420px;}
+.auth-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:6px;}
+.auth-sub{font-size:13px;color:#4a7a9b;margin-bottom:28px;line-height:1.6;}
+.auth-sub a{color:#F28C28;cursor:pointer;text-decoration:none;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;margin-bottom:6px;}
+.field input{width:100%;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;color:#e8f4fb;background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;outline:none;transition:border-color .15s;}
+.field input:focus{border-color:#F28C28;}
+.field input::placeholder{color:#2d5a7a;}
+.auth-submit{width:100%;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:background .12s;margin-top:8px;}
+.auth-submit:hover{background:#e07d1a;}
+.auth-err{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:5px;padding:10px 14px;font-size:12px;color:#e74c3c;margin-bottom:14px;display:none;}
+.auth-err.show{display:block;}
+.trial-badge{background:#163A5F;border:1px solid #1a3a55;border-radius:5px;padding:12px 14px;margin-bottom:20px;font-size:12px;color:#8fb8d4;line-height:1.6;}
+.trial-badge strong{color:#F28C28;}
+
+/* ══════════════════════════════════════
+   APP
+══════════════════════════════════════ */
+.app-layout{display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 52px);}
+.sidebar{background:#061525;border-right:1px solid #1a3a55;padding:14px 0;}
+.sl{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#2d5a7a;padding:6px 14px 4px;}
+.usage-bar-wrap{padding:10px 14px;border-bottom:1px solid #1a3a55;margin-bottom:8px;}
+.usage-label{font-size:10px;color:#4a7a9b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;display:flex;justify-content:space-between;}
+.usage-track{height:4px;background:#1a3a55;border-radius:2px;}
+.usage-fill{height:4px;background:#F28C28;border-radius:2px;transition:width .3s;}
+.upgrade-link{display:block;margin:8px 14px 0;padding:7px 10px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:4px;cursor:pointer;text-align:center;transition:background .12s;}
+.upgrade-link:hover{background:#e07d1a;}
+.upgrade-link.hidden{display:none;}
+.pb{display:block;width:100%;text-align:left;background:transparent;border:none;border-left:3px solid transparent;padding:8px 14px;cursor:pointer;transition:all .1s;}
+.pb:hover,.pb.active{background:#163A5F;border-left-color:#F28C28;}
+.pn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#F28C28;letter-spacing:.04em;}
+.pt{font-size:11.5px;font-weight:500;color:#c8dde9;line-height:1.3;margin-top:1px;}
+.sidebar-sep{border:none;border-top:1px solid #1a3a55;margin:10px 0;}
+.sidebar-link{display:block;width:100%;text-align:left;background:transparent;border:none;padding:8px 14px;cursor:pointer;font-size:12px;color:#4a7a9b;transition:color .1s;font-family:'Barlow',sans-serif;}
+.sidebar-link:hover{color:#c8dde9;}
+.main{padding:18px;display:flex;flex-direction:column;gap:14px;}
+.mode-bar{border-bottom:1px solid #1a3a55;padding-bottom:12px;}
+.mode-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:.02em;}
+.mode-desc{font-size:12px;color:#4a7a9b;margin-top:3px;}
+.lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4a7a9b;margin-bottom:5px;}
+.quick-group{display:flex;gap:6px;flex-wrap:wrap;}
+.quick-btn{padding:5px 10px;font-size:11px;color:#4a7a9b;background:#061525;border:1px solid #1a3a55;border-radius:4px;cursor:pointer;transition:all .1s;font-family:'Barlow',sans-serif;}
+.quick-btn:hover{color:#F28C28;border-color:#F28C28;}
+
+/* CONTEXT FIELDS */
+.context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ctx-field{display:flex;flex-direction:column;gap:4px;}
+.ctx-field label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;}
+.ctx-field input{padding:8px 10px;font-family:'Barlow',sans-serif;font-size:12px;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:4px;outline:none;transition:border-color .15s;}
+.ctx-field input:focus{border-color:#F28C28;}
+.ctx-field input::placeholder{color:#2d5a7a;}
+
+.ta{width:100%;min-height:105px;padding:11px 13px;font-family:'Barlow',sans-serif;font-size:13px;line-height:1.6;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:6px;resize:vertical;outline:none;transition:border-color .15s;}
+.ta:focus{border-color:#F28C28;}
+.ta::placeholder{color:#2d5a7a;}
+.ta-footer{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.char-count{font-size:10px;color:#2d5a7a;}
+.shortcut-hint{font-size:10px;color:#2d5a7a;}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.gen-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:all .12s;}
+.gen-btn:hover{background:#e07d1a;}
+.gen-btn:active{transform:scale(.98);}
+.gen-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.sec-btn{padding:9px 16px;font-size:12px;color:#7fa8c9;background:transparent;border:1px solid #1a3a55;border-radius:5px;cursor:pointer;transition:all .12s;font-family:'Barlow',sans-serif;}
+.sec-btn:hover{border-color:#4a7a9b;color:#c8dde9;}
+.copied{font-size:11px;color:#2ecc71;opacity:0;transition:opacity .2s;}
+.copied.show{opacity:1;}
+.out-wrap{display:none;flex-direction:column;gap:10px;}
+.out-wrap.vis{display:flex;}
+.out-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.out-actions{display:flex;gap:8px;}
+.out-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;color:#c8dde9;background:transparent;border:1px solid #1a3a55;border-radius:4px;cursor:pointer;transition:all .12s;font-family:'Barlow Condensed',sans-serif;}
+.out-btn:hover{background:#061525;color:#fff;}
+.out-btn.pdf-btn{background:#F28C28;border-color:#F28C28;color:#fff;}
+.out-btn.pdf-btn:hover{background:#e07d1a;}
+.out-box{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:18px;font-size:13.5px;line-height:1.75;color:#d8ecf7;min-height:60px;}
+.out-meta{font-size:10px;color:#2d5a7a;font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #0f2a45;}
+.os{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F28C28;margin:14px 0 5px;padding-top:12px;border-top:1px solid #1a3a55;}
+.os:first-child{margin-top:0;padding-top:0;border-top:none;}
+.op{margin-bottom:5px;}
+.oli{padding-left:13px;text-indent:-9px;margin-bottom:3px;}
+.oli::before{content:"▸ ";color:#F28C28;font-size:10px;}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.history-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:4px;}
+.history-sub{font-size:13px;color:#4a7a9b;margin-bottom:20px;}
+.history-empty{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:40px;text-align:center;color:#2d5a7a;font-size:14px;}
+.history-list{display:flex;flex-direction:column;gap:10px;}
+.history-card{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:16px;cursor:pointer;transition:border-color .12s;}
+.history-card:hover{border-color:#F28C28;}
+.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.hc-type{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F28C28;}
+.hc-date{font-size:11px;color:#2d5a7a;}
+.hc-preview{font-size:12.5px;color:#4a7a9b;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+
+/* UPGRADE */
+.upgrade-wrap{min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.upgrade-inner{max-width:580px;width:100%;text-align:center;}
+.upgrade-h{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:800;color:#fff;margin-bottom:8px;}
+.upgrade-h em{font-style:italic;color:#F28C28;}
+.upgrade-sub{font-size:14px;color:#4a7a9b;margin-bottom:32px;line-height:1.7;}
+.plan-card{background:#061525;border:2px solid #F28C28;border-radius:10px;padding:28px;margin-bottom:20px;text-align:left;}
+.plan-tier{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F28C28;margin-bottom:8px;}
+.plan-price{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px;}
+.plan-price sup{font-size:22px;vertical-align:top;margin-top:8px;}
+.plan-period{font-size:12px;color:#4a7a9b;margin-bottom:18px;}
+.plan-features-u{list-style:none;margin-bottom:24px;}
+.plan-features-u li{font-size:13px;color:#8fb8d4;padding:5px 0;display:flex;align-items:flex-start;gap:8px;}
+.plan-features-u li::before{content:'✓';color:#F28C28;font-weight:700;flex-shrink:0;}
+.back-link{font-size:13px;color:#4a7a9b;cursor:pointer;margin-top:16px;display:inline-block;}
+.back-link:hover{color:#c8dde9;}
+.paypal-placeholder{background:#0a1e30;border:1px dashed #1a3a55;border-radius:6px;padding:18px;text-align:center;font-size:12px;color:#2d5a7a;margin-top:8px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;}
+.modal-overlay.show{display:flex;}
+.modal{background:#061525;border:1px solid #1a3a55;border-radius:10px;padding:32px;max-width:420px;width:90%;text-align:center;}
+.modal h3{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:8px;}
+.modal p{font-size:13px;color:#4a7a9b;line-height:1.7;margin-bottom:20px;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+
+/* SETTINGS MODAL */
+.settings-modal{background:#061525;border:1px solid #1a3a55;border-radius:10px;padding:32px;max-width:500px;width:95%;text-align:left;}
+.settings-modal h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;}
+.settings-modal .settings-sub{font-size:12px;color:#4a7a9b;margin-bottom:24px;line-height:1.6;}
+.settings-group{margin-bottom:20px;}
+.settings-group-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F28C28;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1a3a55;}
+.settings-field{margin-bottom:12px;}
+.settings-field label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;margin-bottom:5px;}
+.settings-field input{width:100%;padding:10px 12px;font-family:'Barlow',sans-serif;font-size:13px;color:#e8f4fb;background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;outline:none;transition:border-color .15s;}
+.settings-field input:focus{border-color:#F28C28;}
+.settings-field input::placeholder{color:#2d5a7a;}
+.settings-note{font-size:11px;color:#2d5a7a;margin-top:5px;line-height:1.5;}
+.settings-note a{color:#4a7a9b;}
+.settings-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
+.settings-save{padding:10px 24px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:background .12s;}
+.settings-save:hover{background:#e07d1a;}
+.settings-cancel{padding:10px 16px;font-size:12px;color:#7fa8c9;background:transparent;border:1px solid #1a3a55;border-radius:5px;cursor:pointer;transition:all .12s;}
+.settings-cancel:hover{border-color:#4a7a9b;color:#c8dde9;}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;gap:32px;}
+  .demo-card{display:none;}
+  h1.hero-h{font-size:44px;}
+  .stats-inner{grid-template-columns:repeat(2,1fr);}
+  .pain-grid,.steps,.industry-grid{grid-template-columns:1fr;}
+  .pitch-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .msection{padding:40px 20px;}
+  .app-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .context-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- API KEY BANNER -->
+<div class="api-banner hidden" id="apiBanner">
+  ⚠ No API key configured — reports will not generate. <a onclick="openSettings()">Add your Anthropic API key →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div onclick="goHome()" style="cursor:pointer">
+    <div class="logo">SHIFT<span>LOGIC</span> AI</div>
+    <div class="tagline">AI-Powered Operational Reporting</div>
+  </div>
+  <div class="nav-right" id="navRight">
+    <button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button>
+    <button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>
+  </div>
+</nav>
+
+<!-- ══ MARKETING SCREEN ══ -->
+<div class="screen active" id="screen-marketing">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">Industrial AI That Understands Machines</div>
+        <h1 class="hero-h">Your AI<br>Maintenance<br><em>Engineer.</em></h1>
+        <p class="hero-sub">Transform raw technician notes, fault codes, and machine errors into professional industrial reports — <strong>in seconds.</strong><br><br>Built by people who have actually worked the night shift.</p>
+        <div class="cta-row">
+          <button class="btn-primary" onclick="showScreen('signup')">START FREE TRIAL →</button>
+          <button class="btn-ghost-m" onclick="showScreen('login')">LOG IN</button>
+        </div>
+        <p class="hero-note">5 free reports. No credit card required.</p>
+      </div>
+      <div class="demo-card">
+        <div class="demo-card-bar">
+          <div class="dc-dot" style="background:#e74c3c"></div>
+          <div class="dc-dot" style="background:#f39c12"></div>
+          <div class="dc-dot" style="background:#2ecc71"></div>
+          <span class="dc-title">Live Transformation</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-label" style="color:#c0392b;">▼ Technician types</div>
+          <div class="demo-raw">Motor tripped again. E-stop active. Pneumatic pressure low. Restarted MCC. Monitoring.</div>
+          <div class="demo-arrow">↓ ShiftLogic AI</div>
+          <div class="demo-label" style="color:#27ae60;">▲ Professional report</div>
+          <div class="demo-out">
+            <div class="demo-sec">Incident</div><div class="demo-val">Motor Trip — Recurring Fault with E-Stop Activation</div>
+            <div class="demo-sec">Root Cause</div><div class="demo-val">Low pneumatic pressure suspected as contributing factor to motor overload</div>
+            <div class="demo-sec">Follow-Up</div><div class="demo-val">Check pneumatic supply line. Inspect motor thermal overload settings.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-num">10</div><div class="stat-label">Report Types</div></div>
+      <div class="stat"><div class="stat-num">&lt;30s</div><div class="stat-label">From Notes to Report</div></div>
+      <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Industries Supported</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Training Required</div></div>
+    </div>
+  </div>
+
+  <div class="msection problem-sec">
+    <div class="msection-inner">
+      <div class="eyebrow">The Real Problem</div>
+      <h2 class="sh">Good technicians.<br><em>Terrible paperwork.</em> Every shift.</h2>
+      <div class="problem-quote">"The fault gets fixed. The report gets forgotten. The same fault comes back three months later."</div>
+      <p class="section-sub">At 3am with a stopped line and a supervisor on the radio — <strong>nobody has time to write a proper incident report.</strong> So they write nothing. And the cycle continues.</p>
+      <div class="pain-grid">
+        <div class="pain-card"><div class="pain-icon">🔁</div><div class="pain-title">Repeated Failures</div><div class="pain-text">The same fault gets fixed multiple times because nobody documented the root cause properly the first time.</div></div>
+        <div class="pain-card"><div class="pain-icon">📋</div><div class="pain-title">Broken Handovers</div><div class="pain-text">The incoming shift walks into a live problem nobody told them about — because the outgoing team ran out of time.</div></div>
+        <div class="pain-card"><div class="pain-icon">📊</div><div class="pain-title">Invisible Downtime</div><div class="pain-text">Management asks why production keeps stopping. The data doesn't exist because reporting never happened properly.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msection how-sec">
+    <div class="msection-inner">
+      <div class="eyebrow">How It Works</div>
+      <h2 class="sh">Three steps.<br><em>Thirty seconds.</em></h2>
+      <p class="section-sub">No training required. Works tonight, on any device, inside any operation.</p>
+      <div class="steps">
+        <div class="step" data-n="1"><div class="step-title">Type it as it happens</div><div class="step-text">Write your notes exactly as they come out under pressure. Abbreviations, fault codes, shorthand — ShiftLogic AI understands real technician language.</div></div>
+        <div class="step" data-n="2"><div class="step-title">AI builds the report</div><div class="step-text">Choose your report type — incident report, shift handover, root cause analysis, management summary, and more. Structured and professional instantly.</div></div>
+        <div class="step" data-n="3"><div class="step-title">Copy, send, or download PDF</div><div class="step-text">One click copies the report. Or download a branded PDF. Paste it into your CMMS, email it to management, or hand it to the next shift.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msection industries-sec">
+    <div class="msection-inner">
+      <div class="eyebrow">Industries Supported</div>
+      <h2 class="sh">Built for every operation<br><em>where machines matter.</em></h2>
+      <div class="industry-grid">
+        <div class="industry-card"><div class="ind-icon">🏭</div><div class="ind-title">Manufacturing</div><div class="ind-systems">CNC · Robotics · Hydraulics · Pneumatics · Motors & drives · PLC alarms</div></div>
+        <div class="industry-card"><div class="ind-icon">📦</div><div class="ind-title">Logistics & Warehousing</div><div class="ind-systems">Conveyors · Sorters · Scanners · Labelling systems · Barcode systems</div></div>
+        <div class="industry-card"><div class="ind-icon">🚗</div><div class="ind-title">Automotive</div><div class="ind-systems">Assembly lines · Robot cells · Welding stations · PLC faults · Sensors</div></div>
+        <div class="industry-card"><div class="ind-icon">🥫</div><div class="ind-title">Food & Beverage</div><div class="ind-systems">Packaging · Filling lines · Pneumatic actuators · Washdown systems</div></div>
+        <div class="industry-card"><div class="ind-icon">⚡</div><div class="ind-title">Energy & Utilities</div><div class="ind-systems">Pumps · Turbines · Electrical distribution · Pressure systems</div></div>
+        <div class="industry-card"><div class="ind-icon">🏢</div><div class="ind-title">Facilities Management</div><div class="ind-systems">HVAC · Access systems · Elevators · Generators · BMS faults</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pitch-sec">
+    <div class="pitch-inner">
+      <div class="pitch-h">You're not buying a report tool.<br>You're buying <em>time back.</em></div>
+      <div class="pitch-grid">
+        <div class="pitch-block"><div class="pitch-block-title">For the Technician</div><div class="pitch-block-text">You fix the fault. ShiftLogic writes the report. You don't spend the last twenty minutes of a brutal shift trying to recall what happened at 02:30. It's already written. While you were working.</div></div>
+        <div class="pitch-block"><div class="pitch-block-title">For the Operation</div><div class="pitch-block-text">Every fault. Every shift. Documented properly, every time — regardless of who's on, how tired they are, or how chaotic the night was. That's how you stop losing the same hour to the same fault.</div></div>
+      </div>
+      <div class="pitch-close">ShiftLogic AI doesn't replace your technicians. It makes them <strong>look like the professionals they already are.</strong> The floor runs better. Handovers get cleaner. Repeated faults start disappearing — because now you can finally see the pattern. <strong>That's what proper documentation does.</strong></div>
+    </div>
+  </div>
+
+  <div class="msection pricing-sec">
+    <div class="msection-inner">
+      <div class="eyebrow">Pricing</div>
+      <h2 class="sh">Start free.<br><em>Upgrade when ready.</em></h2>
+      <p class="section-sub">No long contracts. No complicated setup. Cancel anytime.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Free Trial</div>
+          <div class="price-val">£0</div>
+          <div class="price-period">5 reports — no credit card</div>
+          <hr class="price-divider">
+          <ul class="price-features">
+            <li>5 AI-generated reports</li>
+            <li>All 10 report types</li>
+            <li>PDF export</li>
+            <li>Report history</li>
+          </ul>
+          <button class="price-btn price-btn-ghost" onclick="showScreen('signup')">START FREE</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">MOST POPULAR</div>
+          <div class="price-tier">Pro</div>
+          <div class="price-val"><sup>£</sup>29</div>
+          <div class="price-period">per month · cancel anytime</div>
+          <hr class="price-divider">
+          <ul class="price-features">
+            <li>Unlimited report generation</li>
+            <li>All 10 report types</li>
+            <li>Branded PDF export</li>
+            <li>Full report history</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="price-btn price-btn-solid" onclick="showScreen('signup')">START FREE TRIAL →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-cta-sec">
+    <h2 class="footer-cta-h">The shift doesn't wait.<br><em>Neither should your reporting.</em></h2>
+    <p class="footer-cta-sub">Join maintenance teams, warehouse operations, and industrial facilities already using ShiftLogic AI.</p>
+    <button class="btn-primary" style="font-size:18px;padding:16px 40px" onclick="showScreen('signup')">START FREE TRIAL →</button>
+    <p style="font-size:12px;color:#2d5a7a;margin-top:12px">No credit card required. 5 free reports. Cancel anytime.</p>
+    <div class="footer-brand">SHIFT<span>LOGIC</span> AI — AI-Powered Industrial Maintenance &amp; Incident Reporting</div>
+  </div>
+</div>
+
+<!-- ══ SIGNUP SCREEN ══ -->
+<div class="screen" id="screen-signup">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Start Free Trial</div>
+      <p class="auth-sub">5 free reports. No credit card. <a onclick="showScreen('login')">Already have an account?</a></p>
+      <div class="trial-badge"><strong>Free Trial Includes:</strong><br>✓ 5 AI reports &nbsp;✓ All 10 report types &nbsp;✓ PDF export &nbsp;✓ No expiry</div>
+      <div class="auth-err" id="signup-err"></div>
+      <div class="field"><label>Full Name</label><input type="text" id="signup-name" placeholder="Your name"></div>
+      <div class="field"><label>Email Address</label><input type="email" id="signup-email" placeholder="you@company.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="signup-pass" placeholder="Min. 6 characters"></div>
+      <button class="auth-submit" onclick="doSignup()">CREATE FREE ACCOUNT →</button>
+      <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div class="screen" id="screen-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Welcome Back</div>
+      <p class="auth-sub">Log in to ShiftLogic AI. <a onclick="showScreen('signup')">Need an account?</a></p>
+      <div class="auth-err" id="login-err"></div>
+      <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="you@company.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="Your password"></div>
+      <button class="auth-submit" onclick="doLogin()">LOG IN →</button>
+      <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP SCREEN ══ -->
+<div class="screen" id="screen-app">
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="usage-bar-wrap" id="usageBarWrap">
+        <div class="usage-label"><span>REPORTS USED</span><span id="usageCount">0 / 5</span></div>
+        <div class="usage-track"><div class="usage-fill" id="usageFill" style="width:0%"></div></div>
+      </div>
+      <button class="upgrade-link" id="upgradeBtn" onclick="showScreen('upgrade')">⬆ UPGRADE — £29/mo</button>
+      <div class="sl" style="margin-top:8px">Report Types</div>
+      <button class="pb active" onclick="setMode(this,0)"><div class="pn">001</div><div class="pt">Incident Report</div></button>
+      <button class="pb" onclick="setMode(this,1)"><div class="pn">002</div><div class="pt">Shift Handover</div></button>
+      <button class="pb" onclick="setMode(this,2)"><div class="pn">003</div><div class="pt">Root Cause Analysis</div></button>
+      <button class="pb" onclick="setMode(this,3)"><div class="pn">004</div><div class="pt">Recurring Fault Detection</div></button>
+      <button class="pb" onclick="setMode(this,4)"><div class="pn">005</div><div class="pt">Management Summary</div></button>
+      <button class="pb" onclick="setMode(this,5)"><div class="pn">006</div><div class="pt">Critical Escalation</div></button>
+      <button class="pb" onclick="setMode(this,6)"><div class="pn">007</div><div class="pt">Note Cleanup</div></button>
+      <button class="pb" onclick="setMode(this,7)"><div class="pn">008</div><div class="pt">Downtime Analysis</div></button>
+      <button class="pb" onclick="setMode(this,8)"><div class="pn">009</div><div class="pt">Preventative Maintenance</div></button>
+      <button class="pb" onclick="setMode(this,9)"><div class="pn">010</div><div class="pt">Daily Shift Summary</div></button>
+      <hr class="sidebar-sep">
+      <button class="sidebar-link" onclick="showHistory()">📋 Report History</button>
+      <button class="sidebar-link" onclick="openSettings()">⚙ Settings / API Key</button>
+      <button class="sidebar-link" onclick="showScreen('marketing')">🏠 Homepage</button>
+      <button class="sidebar-link" onclick="doLogout()">← Log Out</button>
+    </div>
+    <div class="main" id="generatorPanel">
+      <div class="mode-bar">
+        <div class="mode-title" id="modeTitle">INCIDENT REPORT TRANSFORMATION</div>
+        <div class="mode-desc" id="modeDesc">Convert raw technician notes into a professional operational incident report</div>
+      </div>
+      <!-- CONTEXT FIELDS -->
+      <div>
+        <div class="lbl">Report Context</div>
+        <div class="context-row">
+          <div class="ctx-field">
+            <label>Technician / Author</label>
+            <input type="text" id="ctxTech" placeholder="e.g. J. Smith" oninput="saveCtx()">
+          </div>
+          <div class="ctx-field">
+            <label>Site / Area</label>
+            <input type="text" id="ctxSite" placeholder="e.g. Warehouse 2 — Sort Hall" oninput="saveCtx()">
+          </div>
+          <div class="ctx-field">
+            <label>Shift Date &amp; Time</label>
+            <input type="text" id="ctxShift" placeholder="e.g. 26 May 2026 — Night Shift" oninput="saveCtx()">
+          </div>
+        </div>
+      </div>
+      <!-- QUICK SAMPLES -->
+      <div>
+        <div class="lbl">Quick Load — Real Examples</div>
+        <div class="quick-group">
+          <button class="quick-btn" onclick="loadSample(0)">ASL4 Label Issue</button>
+          <button class="quick-btn" onclick="loadSample(1)">ADTA B Stoppage</button>
+          <button class="quick-btn" onclick="loadSample(2)">E-Stop Isles 49/50</button>
+          <button class="quick-btn" onclick="loadSample(3)">Conveyor Sensor</button>
+          <button class="quick-btn" onclick="loadSample(4)">ASML1 Label Tear</button>
+        </div>
+      </div>
+      <!-- NOTES INPUT -->
+      <div>
+        <div class="lbl">Technician Notes / Raw Input</div>
+        <textarea class="ta" id="notesInput" placeholder="Paste raw notes here — shorthand, abbreviations, anything goes." oninput="onNotesInput()"></textarea>
+        <div class="ta-footer">
+          <span class="char-count" id="charCount">0 characters</span>
+          <span class="shortcut-hint">Ctrl + Enter to generate</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="gen-btn" id="genBtn" onclick="generate()">⚙ GENERATE REPORT</button>
+        <button class="sec-btn" onclick="clearAll()">Clear</button>
+        <span class="copied" id="copiedMsg">✓ Copied</span>
+      </div>
+      <div class="out-wrap" id="outWrap">
+        <div class="out-bar">
+          <div class="lbl" style="margin:0">Generated Report</div>
+          <div class="out-actions">
+            <button class="out-btn" onclick="copyOut()">⎘ Copy Text</button>
+            <button class="out-btn pdf-btn" onclick="downloadPDF()">↓ Download PDF</button>
+          </div>
+        </div>
+        <div class="out-box" id="outBox"></div>
+      </div>
+    </div>
+    <div class="main" id="historyPanel" style="display:none">
+      <div class="history-title">Report History</div>
+      <div class="history-sub">All your previously generated reports</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ UPGRADE SCREEN ══ -->
+<div class="screen" id="screen-upgrade">
+  <div class="upgrade-wrap">
+    <div class="upgrade-inner">
+      <div class="upgrade-h">Unlock <em>Unlimited</em> Reports</div>
+      <p class="upgrade-sub">You've used your 5 free reports. Upgrade to Pro for unlimited reports, full PDF export, and priority support.</p>
+      <div class="plan-card">
+        <div class="plan-tier">Pro Plan</div>
+        <div class="plan-price"><sup>£</sup>29</div>
+        <div class="plan-period">per month — cancel anytime</div>
+        <ul class="plan-features-u">
+          <li>Unlimited AI report generation</li>
+          <li>All 10 report types</li>
+          <li>Branded PDF export</li>
+          <li>Report history &amp; archive</li>
+          <li>Priority email support</li>
+        </ul>
+        <div class="paypal-placeholder" id="paypalContainer">
+          💳 PayPal subscription button will appear here<br>
+          <small style="color:#1a3a55">(Add PayPal Client ID in Settings to activate)</small>
+        </div>
+      </div>
+      <div class="back-link" onclick="showScreen('app')">← Back to app</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIMIT MODAL -->
+<div class="modal-overlay" id="limitModal">
+  <div class="modal">
+    <h3>Free Trial Limit Reached</h3>
+    <p>You've used all 5 free reports. Upgrade to Pro for unlimited reports and full access.</p>
+    <div class="modal-btns">
+      <button class="gen-btn" onclick="showScreen('upgrade')">UPGRADE NOW →</button>
+      <button class="sec-btn" onclick="document.getElementById('limitModal').classList.remove('show')">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="settings-modal">
+    <h3>⚙ Settings</h3>
+    <p class="settings-sub">Configure your API key and default report context. All settings are saved locally in your browser.</p>
+    <div class="settings-group">
+      <div class="settings-group-title">API Configuration</div>
+      <div class="settings-field">
+        <label>Anthropic API Key</label>
+        <input type="password" id="settingsApiKey" placeholder="sk-ant-api03-…">
+        <div class="settings-note">Required to generate reports. Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:#F28C28">console.anthropic.com</a>. Stored locally — never sent anywhere except Anthropic's API.</div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title">Default Report Context</div>
+      <div class="settings-field">
+        <label>Company / Organisation Name</label>
+        <input type="text" id="settingsCompany" placeholder="e.g. Tencian Logistics Ltd">
+        <div class="settings-note">Appears on PDF headers and in report context.</div>
+      </div>
+      <div class="settings-field">
+        <label>Default Site / Facility</label>
+        <input type="text" id="settingsSite" placeholder="e.g. Coventry DC — Sort Hall">
+      </div>
+    </div>
+    <div class="settings-btns">
+      <button class="settings-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="settings-save" onclick="saveSettings()">SAVE SETTINGS</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const FREE_LIMIT = 5;
+
+let currentUser = null;
+let currentMode = 0;
+let lastReportText = '';
+let lastReportMeta = {};
+
+// ── SETTINGS ──
+function getSettings(){
+  try{return JSON.parse(localStorage.getItem('sl_settings')||'{}');}catch(e){return{};}
+}
+function saveSettingsToStorage(s){localStorage.setItem('sl_settings',JSON.stringify(s));}
+function getApiKey(){return getSettings().apiKey||'';}
+
+function openSettings(){
+  const s=getSettings();
+  document.getElementById('settingsApiKey').value=s.apiKey||'';
+  document.getElementById('settingsCompany').value=s.company||'';
+  document.getElementById('settingsSite').value=s.site||'';
+  document.getElementById('settingsModal').classList.add('show');
+}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('show');}
+function saveSettings(){
+  const s={
+    apiKey:document.getElementById('settingsApiKey').value.trim(),
+    company:document.getElementById('settingsCompany').value.trim(),
+    site:document.getElementById('settingsSite').value.trim()
+  };
+  saveSettingsToStorage(s);
+  closeSettings();
+  checkApiBanner();
+  if(s.site&&!document.getElementById('ctxSite').value){
+    document.getElementById('ctxSite').value=s.site;
+  }
+}
+function checkApiBanner(){
+  const banner=document.getElementById('apiBanner');
+  if(!getApiKey()){banner.classList.remove('hidden');}
+  else{banner.classList.add('hidden');}
+}
+
+// ── CONTEXT FIELDS ──
+function saveCtx(){
+  const ctx={tech:document.getElementById('ctxTech').value,site:document.getElementById('ctxSite').value,shift:document.getElementById('ctxShift').value};
+  localStorage.setItem('sl_ctx',JSON.stringify(ctx));
+}
+function loadCtx(){
+  try{
+    const ctx=JSON.parse(localStorage.getItem('sl_ctx')||'{}');
+    if(ctx.tech)document.getElementById('ctxTech').value=ctx.tech;
+    if(ctx.site)document.getElementById('ctxSite').value=ctx.site;
+    if(ctx.shift)document.getElementById('ctxShift').value=ctx.shift;
+  }catch(e){}
+  // Set default shift time if empty
+  if(!document.getElementById('ctxShift').value){
+    const now=new Date();
+    const dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    const h=now.getHours();
+    const shiftLabel=h>=6&&h<14?'Day Shift':h>=14&&h<22?'Late Shift':'Night Shift';
+    document.getElementById('ctxShift').value=`${dateStr} — ${shiftLabel}`;
+  }
+  // Apply settings defaults
+  const s=getSettings();
+  if(s.site&&!document.getElementById('ctxSite').value){
+    document.getElementById('ctxSite').value=s.site;
+  }
+}
+
+// ── NOTES INPUT ──
+function onNotesInput(){
+  const val=document.getElementById('notesInput').value;
+  document.getElementById('charCount').textContent=val.length+' character'+(val.length!==1?'s':'');
+  localStorage.setItem('sl_draft',val);
+}
+function loadDraft(){
+  const d=localStorage.getItem('sl_draft');
+  if(d){document.getElementById('notesInput').value=d;document.getElementById('charCount').textContent=d.length+' characters';}
+}
+
+const SAMPLES = [
+  "ASL4 no read issue. SAL labels unreadable. Darkness too high. Printer cleaned and recalibrated.",
+  "ADTA B stopped around 02:21. Paper parcel stuck under transition plate blocking light curtain. Reset after removal.",
+  "E-stop activated Isles 49/50. Unknown trigger. Reset after inspection.",
+  "Conveyor stopped intermittently during startup. Sensor dirty. Cleaned manually. Monitoring required.",
+  "ASML1 labels tearing after around 50 parcels. Peel bar replaced but issue continued. Manual mode used temporarily."
+];
+
+const MODES = [
+  {title:"INCIDENT REPORT TRANSFORMATION",desc:"Convert raw technician notes into a professional operational incident report",sys:`You are an expert industrial maintenance documentation specialist for ShiftLogic AI. Transform raw technician notes — however messy, abbreviated, or incomplete — into a structured professional incident report.
+
+CRITICAL RULES:
+- Never invent or assume technical details not present in the notes
+- Preserve all equipment identifiers exactly (ASL4, ADTA B, MCC, DBE2, Line 3, Isles 49/50, etc.)
+- Expand abbreviations where safe: MCC=Motor Control Centre, ASL=Auto Sortation Lane, ADTA=Automated Delivery Transfer Area, HMI=Human Machine Interface, E-stop=Emergency Stop, PTW=Permit to Work, KDR/HDR=drive error codes, SAL=Scan and Label
+- If root cause is unknown, write "Root cause unknown at time of report — under investigation"
+- If a time is mentioned, include it precisely. If no time is given, do not invent one.
+- Use professional, confident, factual industrial maintenance language throughout
+- Keep each section focused and factual — no padding, no filler sentences
+
+INDUSTRIES UNDERSTOOD: Warehousing, conveyor systems, manufacturing, packaging, automotive, pneumatics, electrical, robotics, sortation, food & beverage, facilities management.
+
+Use EXACTLY these section headers (on their own line, no colon):
+INCIDENT TITLE
+FAULT DESCRIPTION
+ROOT CAUSE ANALYSIS
+CORRECTIVE ACTIONS TAKEN
+DOWNTIME SUMMARY
+RESOLUTION STATUS
+FOLLOW-UP RECOMMENDATIONS`},
+
+  {title:"SHIFT HANDOVER SUMMARY",desc:"Convert notes into a clear professional handover for the incoming shift",sys:`You are a shift supervisor documentation specialist for ShiftLogic AI. Convert raw end-of-shift notes into a structured handover the incoming team can act on immediately.
+
+CRITICAL RULES:
+- The incoming shift must know exactly what is happening, what needs watching, and what is unresolved
+- State clearly if equipment is running, stopped, being monitored, or in manual mode — never leave this ambiguous
+- Preserve all equipment identifiers (ASL, ADTA, MCC, conveyor IDs, line numbers)
+- State unresolved issues explicitly with current status
+- Include all safety concerns clearly — PTW status, E-stops, safety door issues, isolation notices
+- Be direct and actionable. The incoming shift is often walking in cold.
+- Do not pad. Short, clear sentences are better than long ones.
+
+Use EXACTLY these section headers (on their own line, no colon):
+HANDOVER SUMMARY
+OPEN ISSUES
+PENDING ACTIONS
+MONITORING REQUESTS
+SAFETY CONCERNS
+ESCALATIONS
+NOTES FOR INCOMING SHIFT`},
+
+  {title:"ROOT CAUSE ANALYSIS",desc:"Identify root causes, contributing factors, and prevention measures",sys:`You are a senior industrial root cause analysis specialist for ShiftLogic AI. Analyse incident notes and produce a structured RCA identifying not just what happened, but why — and how to prevent recurrence.
+
+CRITICAL RULES:
+- Distinguish clearly between probable root cause and contributing factors
+- If multiple causes are possible, list in order of probability
+- Never state root cause as definitive if notes say "unknown" — qualify it appropriately
+- Apply 5-Why thinking to dig beneath surface symptoms
+- Prevention measures must be specific and actionable, not vague
+- Common root causes in industrial settings: sensor misalignment, settings drift, wear and tear, obstructions, electrical faults, pneumatic pressure loss, PLC/software errors, human error, inadequate maintenance intervals
+
+Use EXACTLY these section headers (on their own line, no colon):
+INCIDENT OVERVIEW
+PROBABLE ROOT CAUSE
+CONTRIBUTING OPERATIONAL FACTORS
+RECURRING FAILURE RISKS
+PREVENTATIVE MEASURES RECOMMENDED`},
+
+  {title:"RECURRING FAULT DETECTION",desc:"Identify repeated failures and patterns from multiple incidents",sys:`You are an operational intelligence analyst for ShiftLogic AI. Analyse multiple incidents or fault logs to identify patterns, repeat failures, and systemic weaknesses across the operation.
+
+CRITICAL RULES:
+- Look for the same equipment appearing multiple times
+- Look for the same fault type across different equipment (multiple E-stops, multiple label no-reads, multiple resets)
+- Look for time patterns (same shift period, same day of week, post-restart)
+- Identify which faults recurred after resolution — this is a critical signal
+- Be specific about which assets are weak points — do not generalise
+- Prioritise by operational impact, not just frequency
+
+Use EXACTLY these section headers (on their own line, no colon):
+ANALYSIS SUMMARY
+REPEATED EQUIPMENT FAILURES
+RECURRING OPERATIONAL PATTERNS
+COMMON DOWNTIME CAUSES
+SYSTEM WEAK POINTS
+PREVENTATIVE MAINTENANCE PRIORITIES`},
+
+  {title:"MANAGEMENT SUMMARY",desc:"Convert technical incidents into a clear executive-level summary",sys:`You are a management reporting specialist for ShiftLogic AI. Convert complex technical incidents into a concise, non-technical executive summary readable in under two minutes.
+
+CRITICAL RULES:
+- Remove all technical jargon — translate codes to plain language (ASL4 = Auto Sortation Lane 4, MCC reset = electrical panel restart, E-stop = Emergency Stop)
+- Lead with operational impact: what stopped, for how long, what was the business effect
+- Management cares about three things: downtime impact, risk of recurrence, recommended action
+- Be direct. No padding. If it was minor, say so. If serious, explain clearly.
+- If multiple incidents provided, give overall picture first then individual summaries
+- Write as if briefing a non-technical operations director
+
+Use EXACTLY these section headers (on their own line, no colon):
+EXECUTIVE SUMMARY
+OPERATIONAL IMPACT
+DOWNTIME OVERVIEW
+MAJOR RISKS IDENTIFIED
+RECOMMENDED ACTIONS
+FINANCIAL/PRODUCTIVITY IMPLICATIONS`},
+
+  {title:"CRITICAL INCIDENT ESCALATION",desc:"Generate a high-priority escalation report for urgent incidents",sys:`You are a critical incident response coordinator for ShiftLogic AI. Generate an escalation report for incidents requiring immediate management attention, engineering support, or safety response.
+
+CRITICAL RULES:
+- Lead with urgency — the reader must know within the first line that this is serious
+- Be specific about safety risks: E-stop activations, safety door faults, PTW breaches, electrical fault, fire, trapped personnel
+- State exactly what was done and what has NOT yet been done
+- Containment actions must be concrete — "monitoring" is not a containment action
+- Escalation recommendations must name specific roles (shift manager, maintenance engineer, site safety officer, OEM support)
+- If system is currently offline or in manual mode, state this at the top
+
+Use EXACTLY these section headers (on their own line, no colon):
+URGENCY LEVEL
+INCIDENT DESCRIPTION
+OPERATIONAL IMPACT
+SAFETY CONCERNS
+IMMEDIATE ACTIONS REQUIRED
+TEMPORARY CONTAINMENT ACTIONS
+ESCALATION RECOMMENDATIONS`},
+
+  {title:"TECHNICIAN NOTE CLEANUP",desc:"Clean and standardise messy notes while preserving all technical meaning",sys:`You are a technical documentation editor for ShiftLogic AI. Clean raw messy technician notes into clear professional language — without losing technical meaning or inventing any details.
+
+CRITICAL RULES:
+- Preserve ALL equipment identifiers, fault codes, and technical terms exactly as written
+- Expand abbreviations where clearly safe: E-stop, MCC, ASL, ADTA, HMI, PTW, KDR, HDR, SAL
+- Fix grammar and spelling but keep technical vocabulary intact
+- Do not add information not in the original notes
+- Do not remove information — even minor details may matter operationally
+- Format timestamps consistently (e.g. 02:21, ~2 minutes, 07:08–07:12)
+
+Use EXACTLY these section headers (on their own line, no colon):
+CLEANED NOTES
+TECHNICAL TERMS PRESERVED
+AMBIGUITIES RESOLVED
+STANDARDIZED VERSION`},
+
+  {title:"DOWNTIME IMPACT ANALYSIS",desc:"Analyse downtime events to identify bottlenecks, cost, and improvement opportunities",sys:`You are an operational downtime analyst for ShiftLogic AI. Analyse provided downtime events and produce a structured impact assessment that quantifies the situation and surfaces improvement priorities.
+
+CRITICAL RULES:
+- Separate planned maintenance downtime from unplanned fault downtime
+- Identify which equipment caused the most cumulative downtime — this is the priority target
+- If timestamps are available, calculate or estimate total downtime duration
+- Identify bottleneck equipment — faults on high-throughput lines cost more than faults on low-throughput lines
+- Be specific and quantified wherever possible: "conveyor stopped 4 times in 8 hours" beats "conveyor unreliable"
+
+Use EXACTLY these section headers (on their own line, no colon):
+DOWNTIME ANALYSIS SUMMARY
+TOTAL DOWNTIME IMPACT
+HIGHEST-RISK EQUIPMENT
+OPERATIONAL BOTTLENECKS
+REPEATED FAILURE CAUSES
+MAINTENANCE IMPROVEMENT SUGGESTIONS`},
+
+  {title:"PREVENTATIVE MAINTENANCE RECOMMENDATIONS",desc:"Generate PM recommendations based on fault history and operational patterns",sys:`You are a preventative maintenance strategist for ShiftLogic AI. Based on fault history, incident patterns, or operational notes, generate a structured PM plan that reduces the risk of future failures.
+
+CRITICAL RULES:
+- PM recommendations must be specific and actionable, not generic
+- Prioritise by risk: faults causing full-line stoppage take priority over minor delay faults
+- Include realistic inspection intervals based on operational intensity (weekly for high-cycle conveyors, monthly for low-use equipment)
+- Reference specific equipment identified in the notes by name
+- Where spare parts are mentioned in incidents, flag them as recommended stock items to keep on hand
+
+Use EXACTLY these section headers (on their own line, no colon):
+PM STRATEGY OVERVIEW
+IDENTIFIED WEAK POINTS
+INSPECTION PRIORITIES
+RECOMMENDED MAINTENANCE INTERVALS
+OPERATIONAL RISK AREAS
+RELIABILITY IMPROVEMENT ACTIONS`},
+
+  {title:"DAILY SHIFT SUMMARY",desc:"Generate a complete professional daily operational shift summary",sys:`You are a daily operations reporter for ShiftLogic AI. Compile raw shift notes into a complete professional summary capturing what happened, what is outstanding, and what the next shift needs to know.
+
+CRITICAL RULES:
+- Structure the summary chronologically where timestamps are available
+- Separate resolved incidents from ongoing issues clearly
+- Include any equipment currently in manual mode, isolated, or under active monitoring
+- Note safety events, near misses, or access restrictions (PTW status, E-stop history)
+- Recommendations for Next Shift must be actionable and specific — not vague advice
+- If spare parts were used during the shift, note what was consumed so stock can be replenished
+
+Use EXACTLY these section headers (on their own line, no colon):
+SHIFT OVERVIEW
+MAJOR INCIDENTS
+DOWNTIME OVERVIEW
+COMPLETED ACTIONS
+UNRESOLVED ISSUES
+SHIFT PERFORMANCE OBSERVATIONS
+RECOMMENDATIONS FOR NEXT SHIFT`}
+];
+
+const HEADERS = ["INCIDENT TITLE","FAULT DESCRIPTION","ROOT CAUSE ANALYSIS","CORRECTIVE ACTIONS TAKEN","DOWNTIME SUMMARY","RESOLUTION STATUS","FOLLOW-UP RECOMMENDATIONS","HANDOVER SUMMARY","OPEN ISSUES","PENDING ACTIONS","MONITORING REQUESTS","SAFETY CONCERNS","ESCALATIONS","NOTES FOR INCOMING SHIFT","INCIDENT OVERVIEW","PROBABLE ROOT CAUSE","CONTRIBUTING OPERATIONAL FACTORS","RECURRING FAILURE RISKS","PREVENTATIVE MEASURES RECOMMENDED","ANALYSIS SUMMARY","REPEATED EQUIPMENT FAILURES","RECURRING OPERATIONAL PATTERNS","COMMON DOWNTIME CAUSES","SYSTEM WEAK POINTS","PREVENTATIVE MAINTENANCE PRIORITIES","EXECUTIVE SUMMARY","OPERATIONAL IMPACT","DOWNTIME OVERVIEW","MAJOR RISKS IDENTIFIED","RECOMMENDED ACTIONS","FINANCIAL/PRODUCTIVITY IMPLICATIONS","URGENCY LEVEL","INCIDENT DESCRIPTION","IMMEDIATE ACTIONS REQUIRED","TEMPORARY CONTAINMENT ACTIONS","ESCALATION RECOMMENDATIONS","CLEANED NOTES","TECHNICAL TERMS PRESERVED","AMBIGUITIES RESOLVED","STANDARDIZED VERSION","DOWNTIME ANALYSIS SUMMARY","TOTAL DOWNTIME IMPACT","HIGHEST-RISK EQUIPMENT","OPERATIONAL BOTTLENECKS","REPEATED FAILURE CAUSES","MAINTENANCE IMPROVEMENT SUGGESTIONS","PM STRATEGY OVERVIEW","IDENTIFIED WEAK POINTS","INSPECTION PRIORITIES","RECOMMENDED MAINTENANCE INTERVALS","OPERATIONAL RISK AREAS","RELIABILITY IMPROVEMENT ACTIONS","SHIFT OVERVIEW","MAJOR INCIDENTS","COMPLETED ACTIONS","UNRESOLVED ISSUES","SHIFT PERFORMANCE OBSERVATIONS","RECOMMENDATIONS FOR NEXT SHIFT"];
+
+// ── STORAGE ──
+function getUsers(){try{return JSON.parse(localStorage.getItem('sl_users')||'{}');}catch(e){return{};}}
+function saveUsers(u){localStorage.setItem('sl_users',JSON.stringify(u));}
+function getSession(){try{return JSON.parse(localStorage.getItem('sl_session')||'null');}catch(e){return null;}}
+function saveSession(u){localStorage.setItem('sl_session',JSON.stringify(u));}
+function clearSession(){localStorage.removeItem('sl_session');}
+
+// ── INIT ──
+window.onload=function(){
+  // API key is set by the user via Settings, or server-side via Netlify env var
+  const s=getSettings();
+  checkApiBanner();
+  const sess=getSession();
+  if(sess){currentUser=sess;enterApp();}
+  else{showScreen('marketing');}
+};
+
+// ── SCREENS ──
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('screen-'+name);
+  if(el)el.classList.add('active');
+  updateNav(name);
+  window.scrollTo(0,0);
+}
+
+function updateNav(screen){
+  const nr=document.getElementById('navRight');
+  if(screen==='app'||screen==='upgrade'){
+    nr.innerHTML=`<span class="nav-user">👤 ${currentUser?currentUser.name:''}</span><button class="nav-btn nav-btn-ghost" onclick="openSettings()" title="Settings">⚙</button><button class="nav-btn nav-btn-ghost" onclick="doLogout()">Log Out</button>`;
+  } else if(screen==='marketing'){
+    if(currentUser){
+      nr.innerHTML=`<span class="nav-user">👤 ${currentUser.name}</span><button class="nav-btn nav-btn-orange" onclick="showScreen('app')">OPEN APP →</button>`;
+    } else {
+      nr.innerHTML=`<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
+    }
+  } else {
+    nr.innerHTML=`<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
+  }
+}
+
+function goHome(){if(currentUser)showScreen('app');else showScreen('marketing');}
+
+// ── AUTH ──
+function doSignup(){
+  const name=document.getElementById('signup-name').value.trim();
+  const email=document.getElementById('signup-email').value.trim().toLowerCase();
+  const pass=document.getElementById('signup-pass').value;
+  const err=document.getElementById('signup-err');
+  err.classList.remove('show');
+  if(!name||!email||!pass){err.textContent='Please fill in all fields.';err.classList.add('show');return;}
+  if(pass.length<6){err.textContent='Password must be at least 6 characters.';err.classList.add('show');return;}
+  if(!email.includes('@')){err.textContent='Please enter a valid email.';err.classList.add('show');return;}
+  const users=getUsers();
+  if(users[email]){err.textContent='An account with this email already exists.';err.classList.add('show');return;}
+  users[email]={name,email,pass,reportsUsed:0,isPro:false,history:[],createdAt:new Date().toISOString()};
+  saveUsers(users);
+  currentUser=users[email];
+  saveSession(currentUser);
+  enterApp();
+}
+
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  err.classList.remove('show');
+  const users=getUsers();
+  if(!users[email]||users[email].pass!==pass){err.textContent='Invalid email or password.';err.classList.add('show');return;}
+  currentUser=users[email];
+  saveSession(currentUser);
+  enterApp();
+}
+
+function doLogout(){currentUser=null;clearSession();showScreen('marketing');}
+
+function enterApp(){
+  showScreen('app');
+  updateUsageBar();
+  showGenerator();
+  loadCtx();
+  loadDraft();
+}
+
+// ── USAGE ──
+function updateUsageBar(){
+  if(!currentUser)return;
+  const used=currentUser.reportsUsed||0;
+  const isPro=currentUser.isPro;
+  document.getElementById('usageCount').textContent=isPro?'∞ Pro':`${used} / ${FREE_LIMIT}`;
+  document.getElementById('usageFill').style.width=isPro?'100%':`${Math.min(100,(used/FREE_LIMIT)*100)}%`;
+  document.getElementById('usageFill').style.background=isPro?'#2ecc71':(used>=FREE_LIMIT?'#e74c3c':'#F28C28');
+  document.getElementById('upgradeBtn').classList.toggle('hidden',isPro);
+}
+
+function canGenerate(){if(!currentUser)return false;if(currentUser.isPro)return true;return(currentUser.reportsUsed||0)<FREE_LIMIT;}
+
+function incrementUsage(){
+  const users=getUsers();
+  users[currentUser.email].reportsUsed=(users[currentUser.email].reportsUsed||0)+1;
+  currentUser.reportsUsed=users[currentUser.email].reportsUsed;
+  saveUsers(users);saveSession(currentUser);updateUsageBar();
+}
+
+function saveToHistory(notes,report,meta){
+  const users=getUsers();
+  if(!users[currentUser.email].history)users[currentUser.email].history=[];
+  users[currentUser.email].history.unshift({
+    type:MODES[currentMode].title,
+    notes:notes.substring(0,120),
+    report,
+    meta:meta||{},
+    date:new Date().toLocaleString('en-GB')
+  });
+  if(users[currentUser.email].history.length>50)users[currentUser.email].history.pop();
+  saveUsers(users);currentUser.history=users[currentUser.email].history;saveSession(currentUser);
+}
+
+// ── GENERATOR ──
+function showGenerator(){document.getElementById('generatorPanel').style.display='flex';document.getElementById('historyPanel').style.display='none';}
+function showHistory(){document.getElementById('generatorPanel').style.display='none';document.getElementById('historyPanel').style.display='flex';renderHistory();}
+
+function setMode(btn,idx){
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');currentMode=idx;
+  document.getElementById('modeTitle').textContent=MODES[idx].title;
+  document.getElementById('modeDesc').textContent=MODES[idx].desc;
+  document.getElementById('outWrap').classList.remove('vis');
+  showGenerator();
+}
+
+function loadSample(idx){
+  document.getElementById('notesInput').value=SAMPLES[idx];
+  onNotesInput();
+  document.getElementById('outWrap').classList.remove('vis');
+  showGenerator();
+}
+
+function renderOutput(text,meta){
+  lastReportText=text;
+  lastReportMeta=meta||{};
+  const box=document.getElementById('outBox');
+  let html='';
+  // Meta header
+  const parts=[];
+  if(meta){
+    if(meta.tech)parts.push('👤 '+meta.tech);
+    if(meta.site)parts.push('📍 '+meta.site);
+    if(meta.shift)parts.push('🕐 '+meta.shift);
+    if(meta.company)parts.push('🏢 '+meta.company);
+    parts.push('Generated: '+new Date().toLocaleString('en-GB'));
+  }
+  if(parts.length)html+=`<div class="out-meta">${parts.join('&nbsp; · &nbsp;')}</div>`;
+  for(const line of text.split('\n')){
+    const t=line.trim();
+    if(!t){html+='<div style="height:5px"></div>';continue;}
+    const isH=HEADERS.some(h=>t===h||t===h+':');
+    if(isH)html+=`<div class="os">${t.replace(':','')}</div>`;
+    else if(/^[•\-\*]/.test(t))html+=`<div class="oli">${t.replace(/^[•\-\*]\s*/,'')}</div>`;
+    else html+=`<div class="op">${t}</div>`;
+  }
+  box.innerHTML=html;
+}
+
+// ── GENERATE ──
+const LOADING_MSGS=['Analysing operational data…','Parsing fault context…','Structuring report sections…','Applying industrial terminology…','Almost ready…'];
+
+async function generate(){
+  // API key is handled server-side via Netlify Function proxy
+  const apiKey=getApiKey(); // kept for local dev fallback only
+  if(!canGenerate()){document.getElementById('limitModal').classList.add('show');return;}
+  const notes=document.getElementById('notesInput').value.trim();
+  if(!notes){document.getElementById('notesInput').focus();return;}
+
+  const meta={
+    tech:document.getElementById('ctxTech').value.trim(),
+    site:document.getElementById('ctxSite').value.trim(),
+    shift:document.getElementById('ctxShift').value.trim(),
+    company:getSettings().company||''
+  };
+
+  // Build enriched prompt
+  const ctxLines=[];
+  if(meta.company)ctxLines.push('Organisation: '+meta.company);
+  if(meta.site)ctxLines.push('Site/Area: '+meta.site);
+  if(meta.tech)ctxLines.push('Reported by: '+meta.tech);
+  if(meta.shift)ctxLines.push('Shift: '+meta.shift);
+  const ctxBlock=ctxLines.length?ctxLines.join('\n')+'\n\n':'';
+
+  const btn=document.getElementById('genBtn');
+  const wrap=document.getElementById('outWrap');
+  const box=document.getElementById('outBox');
+  btn.disabled=true;
+  wrap.classList.add('vis');
+  let msgIdx=0;
+  box.innerHTML=`<div style="color:#2d5a7a;font-size:13px;"><span class="spin" style="margin-right:8px"></span>${LOADING_MSGS[0]}</div>`;
+  const loadInterval=setInterval(()=>{
+    msgIdx=(msgIdx+1)%LOADING_MSGS.length;
+    const inner=box.querySelector('div');
+    if(inner)inner.innerHTML=`<span class="spin" style="margin-right:8px"></span>${LOADING_MSGS[msgIdx]}`;
+  },1800);
+  btn.innerHTML='<span class="spin"></span> PROCESSING…';
+
+  try{
+    const res=await fetch('/.netlify/functions/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-opus-4-20250514',
+        max_tokens:1500,
+        system:MODES[currentMode].sys,
+        messages:[{role:'user',content:`${ctxBlock}Raw operational notes:\n\n${notes}`}]
+      })
+    });
+    clearInterval(loadInterval);
+    if(!res.ok){
+      const errData=await res.json().catch(()=>({}));
+      let msg='Generation failed.';
+      if(res.status===401)msg='Server API key issue. Please contact support.';
+      else if(res.status===429)msg='Rate limit reached. Wait a moment and try again.';
+      else if(res.status===500)msg='Anthropic server error. Try again in a few seconds.';
+      else if(errData.error?.message)msg='Error: '+errData.error.message;
+      box.innerHTML=`<div style="color:#e74c3c;font-size:13px;">⚠ ${msg}</div>`;
+      btn.disabled=false;btn.innerHTML='⚙ GENERATE REPORT';
+      return;
+    }
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'No output received.';
+    renderOutput(text,meta);
+    incrementUsage();
+    saveToHistory(notes,text,meta);
+  }catch(e){
+    clearInterval(loadInterval);
+    box.innerHTML='<div style="color:#e74c3c;font-size:13px;">⚠ Network error. Check your internet connection and try again.</div>';
+  }
+  btn.disabled=false;btn.innerHTML='⚙ GENERATE REPORT';
+}
+
+function clearAll(){
+  document.getElementById('notesInput').value='';
+  document.getElementById('outWrap').classList.remove('vis');
+  lastReportText='';
+  document.getElementById('charCount').textContent='0 characters';
+  localStorage.removeItem('sl_draft');
+}
+
+function copyOut(){
+  const meta=lastReportMeta;
+  const parts=[];
+  if(meta.company)parts.push('Organisation: '+meta.company);
+  if(meta.site)parts.push('Site/Area: '+meta.site);
+  if(meta.tech)parts.push('Reported by: '+meta.tech);
+  if(meta.shift)parts.push('Shift: '+meta.shift);
+  parts.push('Generated: '+new Date().toLocaleString('en-GB'));
+  const header=parts.join(' · ')+'\n'+'─'.repeat(60)+'\n\n';
+  navigator.clipboard.writeText(header+lastReportText).then(()=>{
+    const m=document.getElementById('copiedMsg');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);
+  }).catch(()=>{
+    // Fallback
+    const ta=document.createElement('textarea');
+    ta.value=header+lastReportText;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    const m=document.getElementById('copiedMsg');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);
+  });
+}
+
+// ── HISTORY ──
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  const history=currentUser?.history||[];
+  if(!history.length){list.innerHTML='<div class="history-empty">No reports yet. Generate your first report to see it here.</div>';return;}
+  list.innerHTML='<div class="history-list">'+history.map((h,i)=>`
+    <div class="history-card" onclick="loadFromHistory(${i})">
+      <div class="hc-top"><span class="hc-type">${h.type}</span><span class="hc-date">${h.date}</span></div>
+      ${h.meta&&(h.meta.site||h.meta.tech)?`<div style="font-size:10px;color:#2d5a7a;margin-bottom:4px;letter-spacing:.04em;">${[h.meta.tech,h.meta.site].filter(Boolean).join(' · ')}</div>`:''}
+      <div class="hc-preview">${h.notes}…</div>
+    </div>`).join('')+'</div>';
+}
+
+function loadFromHistory(idx){
+  const h=currentUser.history[idx];if(!h)return;
+  const modeIdx=MODES.findIndex(m=>m.title===h.type);
+  if(modeIdx>=0){
+    currentMode=modeIdx;
+    document.querySelectorAll('.pb').forEach((b,i)=>b.classList.toggle('active',i===modeIdx));
+    document.getElementById('modeTitle').textContent=MODES[modeIdx].title;
+    document.getElementById('modeDesc').textContent=MODES[modeIdx].desc;
+  }
+  renderOutput(h.report,h.meta||{});
+  document.getElementById('outWrap').classList.add('vis');
+  showGenerator();
+}
+
+// ── PDF ──
+function downloadPDF(){
+  if(!lastReportText)return;
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const pageW=doc.internal.pageSize.getWidth();
+  const pageH=doc.internal.pageSize.getHeight();
+  const margin=18;const contentW=pageW-margin*2;
+  const s=getSettings();
+  const meta=lastReportMeta||{};
+  const company=meta.company||s.company||'';
+
+  // Background
+  doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
+  // Top accent
+  doc.setFillColor(242,140,40);doc.rect(0,0,pageW,2,'F');
+  // Header band
+  doc.setFillColor(6,21,37);doc.rect(0,2,pageW,26,'F');
+
+  // Logo
+  doc.setFont('helvetica','bold');doc.setFontSize(17);
+  doc.setTextColor(255,255,255);doc.text('SHIFTLOGIC',margin,13);
+  doc.setTextColor(242,140,40);doc.text('AI',margin+47,13);
+
+  // Report type
+  doc.setFont('helvetica','normal');doc.setFontSize(8);
+  doc.setTextColor(74,122,155);doc.text(MODES[currentMode].title,margin,19);
+
+  // Company name under logo
+  if(company){
+    doc.setFontSize(7.5);doc.setTextColor(200,220,230);
+    doc.text(company,margin,24);
+  }
+
+  // Right side meta
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  doc.setFontSize(8);doc.setTextColor(74,122,155);
+  doc.text(dateStr,pageW-margin,13,{align:'right'});
+  if(meta.shift){doc.setFontSize(7.5);doc.text(meta.shift,pageW-margin,19,{align:'right'});}
+  if(meta.tech){doc.setFontSize(7);doc.setTextColor(45,90,122);doc.text('By: '+meta.tech,pageW-margin,24,{align:'right'});}
+  if(meta.site){doc.setFontSize(7);doc.text(meta.site,pageW-margin,28,{align:'right'});}
+
+  // Divider
+  doc.setDrawColor(242,140,40);doc.setLineWidth(0.5);doc.line(margin,30,pageW-margin,30);
+
+  let y=38;
+  for(const line of lastReportText.split('\n')){
+    const t=line.trim();if(!t){y+=3;continue;}
+    if(y>pageH-18){
+      doc.addPage();
+      doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
+      // Continuation header
+      doc.setFillColor(6,21,37);doc.rect(0,0,pageW,10,'F');
+      doc.setFillColor(242,140,40);doc.rect(0,0,pageW,1.5,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text('SHIFTLOGIC',margin,7);
+      doc.setTextColor(242,140,40);doc.text('AI',margin+22,7);
+      doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(45,90,122);
+      doc.text(MODES[currentMode].title,margin+28,7);
+      y=16;
+    }
+    const isH=HEADERS.some(h=>t===h||t===h+':');
+    if(isH){
+      y+=5;
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(242,140,40);
+      doc.text(t.replace(':',''),margin,y);
+      y+=2;
+      doc.setDrawColor(26,58,85);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);
+      y+=5;
+    } else {
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(216,236,247);
+      const prefix=/^[•\-\*]/.test(t)?'  ▸  ':'';
+      const clean=prefix+t.replace(/^[•\-\*]\s*/,'');
+      const wrapped=doc.splitTextToSize(clean,contentW-(prefix?4:0));
+      for(const wl of wrapped){
+        if(y>pageH-18){
+          doc.addPage();doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
+          doc.setFillColor(6,21,37);doc.rect(0,0,pageW,10,'F');
+          doc.setFillColor(242,140,40);doc.rect(0,0,pageW,1.5,'F');
+          y=16;
+        }
+        doc.text(wl,margin+(prefix?4:0),y);y+=5.5;
+      }
+    }
+  }
+
+  // Footer
+  doc.setFillColor(6,21,37);doc.rect(0,pageH-11,pageW,11,'F');
+  doc.setDrawColor(26,58,85);doc.setLineWidth(0.3);doc.line(0,pageH-11,pageW,pageH-11);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(45,90,122);
+  doc.text('SHIFTLOGIC AI — AI-Powered Industrial Maintenance & Incident Reporting',margin,pageH-5);
+  doc.text('shiftlogic.ai',pageW-margin,pageH-5,{align:'right'});
+
+  doc.save(`ShiftLogic_${MODES[currentMode].title.replace(/\s+/g,'_')}_${now.toISOString().slice(0,10)}.pdf`);
+}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();generate();}
+  if(e.key==='Escape'){
+    document.getElementById('settingsModal').classList.remove('show');
+    document.getElementById('limitModal').classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>
+                                                                                                                                                                          
