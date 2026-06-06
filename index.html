@@ -1650,4 +1650,24 @@ function downloadPDF(){
   for(const line of lastReportText.split('\n')){
     const t = line.trim();
     if(!t){ y+=3; continue; }
-    if(y > pageH-20){ doc.addPage(); doc.setFillColor(10,
+    if(y > pageH-20){ doc.addPage(); doc.setFillColor(10,30,48); doc.rect(0,0,pageW,pageH,'F'); doc.setFillColor(242,140,40); doc.rect(0,0,pageW,2,'F'); y=10; }
+    if(t.match(/^[A-Z][A-Z\s\/\-]{3,}$/) || t.startsWith('##')){
+      const heading = t.replace(/^#+\s*/,'');
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(242,140,40);
+      doc.text(heading, margin, y); y+=6;
+      doc.setDrawColor(242,140,40); doc.setLineWidth(0.2); doc.line(margin, y-1, pageW-margin, y-1); y+=2;
+    } else if(t.startsWith('**') && t.endsWith('**')){
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255);
+      doc.text(t.replace(/\*\*/g,''), margin, y); y+=5;
+    } else {
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(200,210,220);
+      const wrapped = doc.splitTextToSize(t, pageW - margin*2);
+      doc.text(wrapped, margin, y); y += wrapped.length * 5;
+    }
+    y+=1;
+  }
+  doc.save('ShiftLogic_Report_' + Date.now() + '.pdf');
+}
+</script>
+</body>
+</html>
