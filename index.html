@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShiftLogic AI — Industrial AI That Understands Machines</title>
+<title>ShiftLogic AI v6 — Industrial AI That Understands Machines</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -26,11 +26,6 @@ nav{background:#061525;border-bottom:2px solid #F28C28;padding:11px 24px;display
 .nav-btn-ghost:hover{border-color:#4a7a9b;}
 .nav-btn-orange{color:#fff;background:#F28C28;}
 .nav-btn-orange:hover{background:#e07d1a;}
-
-/* API KEY BANNER */
-.api-banner{background:#1a0a0a;border-bottom:1px solid #5a1a1a;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#e74c3c;}
-.api-banner a{color:#F28C28;cursor:pointer;text-decoration:underline;margin-left:8px;}
-.api-banner.hidden{display:none;}
 
 /* ══════════════════════════════════════
    MARKETING PAGE
@@ -139,13 +134,17 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .auth-sub a{color:#F28C28;cursor:pointer;text-decoration:none;}
 .field{margin-bottom:16px;}
 .field label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;margin-bottom:6px;}
-.field input{width:100%;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;color:#e8f4fb;background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;outline:none;transition:border-color .15s;}
-.field input:focus{border-color:#F28C28;}
+.field input,.field select{width:100%;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;color:#e8f4fb;background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:#F28C28;}
 .field input::placeholder{color:#2d5a7a;}
+.field select option{background:#0a1e30;}
 .auth-submit{width:100%;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:background .12s;margin-top:8px;}
 .auth-submit:hover{background:#e07d1a;}
+.auth-submit:disabled{opacity:.5;cursor:not-allowed;}
 .auth-err{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:5px;padding:10px 14px;font-size:12px;color:#e74c3c;margin-bottom:14px;display:none;}
 .auth-err.show{display:block;}
+.auth-info{background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;padding:10px 14px;font-size:12px;color:#7fa8c9;margin-bottom:14px;display:none;}
+.auth-info.show{display:block;}
 .trial-badge{background:#163A5F;border:1px solid #1a3a55;border-radius:5px;padding:12px 14px;margin-bottom:20px;font-size:12px;color:#8fb8d4;line-height:1.6;}
 .trial-badge strong{color:#F28C28;}
 
@@ -174,24 +173,18 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .mode-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:.02em;}
 .mode-desc{font-size:12px;color:#4a7a9b;margin-top:3px;}
 .lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4a7a9b;margin-bottom:5px;}
+.context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;}
+.ctx-field input{width:100%;padding:8px 10px;font-family:'Barlow',sans-serif;font-size:12px;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:4px;outline:none;transition:border-color .15s;}
+.ctx-field input:focus{border-color:#F28C28;}
+.ctx-field input::placeholder{color:#2d5a7a;}
+.ctx-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#2d5a7a;margin-bottom:4px;}
 .quick-group{display:flex;gap:6px;flex-wrap:wrap;}
 .quick-btn{padding:5px 10px;font-size:11px;color:#4a7a9b;background:#061525;border:1px solid #1a3a55;border-radius:4px;cursor:pointer;transition:all .1s;font-family:'Barlow',sans-serif;}
 .quick-btn:hover{color:#F28C28;border-color:#F28C28;}
-
-/* CONTEXT FIELDS */
-.context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.ctx-field{display:flex;flex-direction:column;gap:4px;}
-.ctx-field label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;}
-.ctx-field input{padding:8px 10px;font-family:'Barlow',sans-serif;font-size:12px;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:4px;outline:none;transition:border-color .15s;}
-.ctx-field input:focus{border-color:#F28C28;}
-.ctx-field input::placeholder{color:#2d5a7a;}
-
-.ta{width:100%;min-height:105px;padding:11px 13px;font-family:'Barlow',sans-serif;font-size:13px;line-height:1.6;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:6px;resize:vertical;outline:none;transition:border-color .15s;}
+.ta{width:100%;min-height:120px;padding:11px 13px;font-family:'Barlow',sans-serif;font-size:13px;line-height:1.6;color:#e8f4fb;background:#061525;border:1px solid #1a3a55;border-radius:6px;resize:vertical;outline:none;transition:border-color .15s;}
 .ta:focus{border-color:#F28C28;}
 .ta::placeholder{color:#2d5a7a;}
-.ta-footer{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
-.char-count{font-size:10px;color:#2d5a7a;}
-.shortcut-hint{font-size:10px;color:#2d5a7a;}
+.char-count{font-size:10px;color:#2d5a7a;text-align:right;margin-top:3px;}
 .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .gen-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:all .12s;}
 .gen-btn:hover{background:#e07d1a;}
@@ -210,7 +203,14 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .out-btn.pdf-btn{background:#F28C28;border-color:#F28C28;color:#fff;}
 .out-btn.pdf-btn:hover{background:#e07d1a;}
 .out-box{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:18px;font-size:13.5px;line-height:1.75;color:#d8ecf7;min-height:60px;}
-.out-meta{font-size:10px;color:#2d5a7a;font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #0f2a45;}
+.missing-info{background:#1a1a0a;border:1px solid #3a3a1a;border-radius:5px;padding:10px 14px;font-size:11px;color:#a0a050;margin-top:6px;display:none;}
+.missing-info.show{display:block;}
+.missing-info strong{color:#c8c860;}
+.validation-warn{background:#1a100a;border:1px solid #5a3010;border-radius:5px;padding:10px 14px;font-size:11px;color:#e09050;margin-top:6px;display:none;line-height:1.6;}
+.validation-warn.show{display:block;}
+.validation-warn strong{color:#F28C28;}
+.validation-warn ul{margin:6px 0 0 14px;}
+.pipeline-step{color:#2d5a7a;font-size:13px;padding:14px 0;}
 .os{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F28C28;margin:14px 0 5px;padding-top:12px;border-top:1px solid #1a3a55;}
 .os:first-child{margin-top:0;padding-top:0;border-top:none;}
 .op{margin-bottom:5px;}
@@ -218,6 +218,8 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .oli::before{content:"▸ ";color:#F28C28;font-size:10px;}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
+.err-box{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:6px;padding:12px 14px;font-size:12.5px;color:#e74c3c;line-height:1.6;}
+.err-box strong{display:block;margin-bottom:4px;font-size:13px;}
 .history-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:4px;}
 .history-sub{font-size:13px;color:#4a7a9b;margin-bottom:20px;}
 .history-empty{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:40px;text-align:center;color:#2d5a7a;font-size:14px;}
@@ -255,35 +257,8 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .modal p{font-size:13px;color:#4a7a9b;line-height:1.7;margin-bottom:20px;}
 .modal-btns{display:flex;gap:10px;justify-content:center;}
 
-/* SETTINGS MODAL */
-.settings-modal{background:#061525;border:1px solid #1a3a55;border-radius:10px;padding:32px;max-width:500px;width:95%;text-align:left;}
-.settings-modal h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;}
-.settings-modal .settings-sub{font-size:12px;color:#4a7a9b;margin-bottom:24px;line-height:1.6;}
-.settings-group{margin-bottom:20px;}
-.settings-group-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F28C28;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1a3a55;}
-.settings-field{margin-bottom:12px;}
-.settings-field label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a7a9b;margin-bottom:5px;}
-.settings-field input{width:100%;padding:10px 12px;font-family:'Barlow',sans-serif;font-size:13px;color:#e8f4fb;background:#0a1e30;border:1px solid #1a3a55;border-radius:5px;outline:none;transition:border-color .15s;}
-.settings-field input:focus{border-color:#F28C28;}
-.settings-field input::placeholder{color:#2d5a7a;}
-.settings-note{font-size:11px;color:#2d5a7a;margin-top:5px;line-height:1.5;}
-.settings-note a{color:#4a7a9b;}
-.settings-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
-.settings-save{padding:10px 24px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;color:#fff;background:#F28C28;border:none;border-radius:5px;cursor:pointer;transition:background .12s;}
-.settings-save:hover{background:#e07d1a;}
-.settings-cancel{padding:10px 16px;font-size:12px;color:#7fa8c9;background:transparent;border:1px solid #1a3a55;border-radius:5px;cursor:pointer;transition:all .12s;}
-.settings-cancel:hover{border-color:#4a7a9b;color:#c8dde9;}
-
-/* MOBILE */
-@media(max-width:768px){
-  .hero-inner{grid-template-columns:1fr;gap:32px;}
-  .demo-card{display:none;}
-  h1.hero-h{font-size:44px;}
-  .stats-inner{grid-template-columns:repeat(2,1fr);}
-  .pain-grid,.steps,.industry-grid{grid-template-columns:1fr;}
-  .pitch-grid{grid-template-columns:1fr;}
-  .pricing-grid{grid-template-columns:1fr;}
-  .msection{padding:40px 20px;}
+@media(max-width:700px){
+  .hero-inner{grid-template-columns:1fr;}
   .app-layout{grid-template-columns:1fr;}
   .sidebar{display:none;}
   .context-row{grid-template-columns:1fr;}
@@ -291,11 +266,6 @@ h2.sh em{font-style:italic;color:#F28C28;}
 </style>
 </head>
 <body>
-
-<!-- API KEY BANNER -->
-<div class="api-banner hidden" id="apiBanner">
-  ⚠ No API key configured — reports will not generate. <a onclick="openSettings()">Add your Anthropic API key →</a>
-</div>
 
 <!-- NAV -->
 <nav>
@@ -337,23 +307,22 @@ h2.sh em{font-style:italic;color:#F28C28;}
           <div class="demo-label" style="color:#27ae60;">▲ Professional report</div>
           <div class="demo-out">
             <div class="demo-sec">Incident</div><div class="demo-val">Motor Trip — Recurring Fault with E-Stop Activation</div>
-            <div class="demo-sec">Root Cause</div><div class="demo-val">Low pneumatic pressure suspected as contributing factor to motor overload</div>
-            <div class="demo-sec">Follow-Up</div><div class="demo-val">Check pneumatic supply line. Inspect motor thermal overload settings.</div>
+            <div class="demo-sec">Suspected Cause</div><div class="demo-val">Low pneumatic pressure is the suspected contributing factor. Root cause not yet confirmed.</div>
+            <div class="demo-sec">Actions Taken</div><div class="demo-val">MCC reset and restarted. System returned to operational condition. Under active monitoring.</div>
+            <div class="demo-sec">Follow-Up</div><div class="demo-val">Inspect pneumatic supply line pressure. Check motor thermal overload settings. Log as recurring if fault repeats within 24 hours.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <div class="stats-bar">
     <div class="stats-inner">
-      <div class="stat"><div class="stat-num">10</div><div class="stat-label">Report Types</div></div>
+      <div class="stat"><div class="stat-num">14</div><div class="stat-label">Report Types</div></div>
       <div class="stat"><div class="stat-num">&lt;30s</div><div class="stat-label">From Notes to Report</div></div>
       <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Industries Supported</div></div>
       <div class="stat"><div class="stat-num">0</div><div class="stat-label">Training Required</div></div>
     </div>
   </div>
-
   <div class="msection problem-sec">
     <div class="msection-inner">
       <div class="eyebrow">The Real Problem</div>
@@ -367,7 +336,6 @@ h2.sh em{font-style:italic;color:#F28C28;}
       </div>
     </div>
   </div>
-
   <div class="msection how-sec">
     <div class="msection-inner">
       <div class="eyebrow">How It Works</div>
@@ -380,22 +348,20 @@ h2.sh em{font-style:italic;color:#F28C28;}
       </div>
     </div>
   </div>
-
   <div class="msection industries-sec">
     <div class="msection-inner">
       <div class="eyebrow">Industries Supported</div>
       <h2 class="sh">Built for every operation<br><em>where machines matter.</em></h2>
       <div class="industry-grid">
-        <div class="industry-card"><div class="ind-icon">🏭</div><div class="ind-title">Manufacturing</div><div class="ind-systems">CNC · Robotics · Hydraulics · Pneumatics · Motors & drives · PLC alarms</div></div>
-        <div class="industry-card"><div class="ind-icon">📦</div><div class="ind-title">Logistics & Warehousing</div><div class="ind-systems">Conveyors · Sorters · Scanners · Labelling systems · Barcode systems</div></div>
+        <div class="industry-card"><div class="ind-icon">🏭</div><div class="ind-title">Manufacturing</div><div class="ind-systems">CNC · Robotics · Hydraulics · Pneumatics · Motors &amp; drives · PLC alarms</div></div>
+        <div class="industry-card"><div class="ind-icon">📦</div><div class="ind-title">Logistics &amp; Warehousing</div><div class="ind-systems">Conveyors · Sorters · Scanners · Labelling systems · Barcode systems</div></div>
         <div class="industry-card"><div class="ind-icon">🚗</div><div class="ind-title">Automotive</div><div class="ind-systems">Assembly lines · Robot cells · Welding stations · PLC faults · Sensors</div></div>
-        <div class="industry-card"><div class="ind-icon">🥫</div><div class="ind-title">Food & Beverage</div><div class="ind-systems">Packaging · Filling lines · Pneumatic actuators · Washdown systems</div></div>
-        <div class="industry-card"><div class="ind-icon">⚡</div><div class="ind-title">Energy & Utilities</div><div class="ind-systems">Pumps · Turbines · Electrical distribution · Pressure systems</div></div>
+        <div class="industry-card"><div class="ind-icon">🥫</div><div class="ind-title">Food &amp; Beverage</div><div class="ind-systems">Packaging · Filling lines · Pneumatic actuators · Washdown systems</div></div>
+        <div class="industry-card"><div class="ind-icon">⚡</div><div class="ind-title">Energy &amp; Utilities</div><div class="ind-systems">Pumps · Turbines · Electrical distribution · Pressure systems</div></div>
         <div class="industry-card"><div class="ind-icon">🏢</div><div class="ind-title">Facilities Management</div><div class="ind-systems">HVAC · Access systems · Elevators · Generators · BMS faults</div></div>
       </div>
     </div>
   </div>
-
   <div class="pitch-sec">
     <div class="pitch-inner">
       <div class="pitch-h">You're not buying a report tool.<br>You're buying <em>time back.</em></div>
@@ -406,7 +372,6 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <div class="pitch-close">ShiftLogic AI doesn't replace your technicians. It makes them <strong>look like the professionals they already are.</strong> The floor runs better. Handovers get cleaner. Repeated faults start disappearing — because now you can finally see the pattern. <strong>That's what proper documentation does.</strong></div>
     </div>
   </div>
-
   <div class="msection pricing-sec">
     <div class="msection-inner">
       <div class="eyebrow">Pricing</div>
@@ -420,7 +385,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
           <hr class="price-divider">
           <ul class="price-features">
             <li>5 AI-generated reports</li>
-            <li>All 10 report types</li>
+            <li>All 14 report types</li>
             <li>PDF export</li>
             <li>Report history</li>
           </ul>
@@ -434,7 +399,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
           <hr class="price-divider">
           <ul class="price-features">
             <li>Unlimited report generation</li>
-            <li>All 10 report types</li>
+            <li>All 14 report types</li>
             <li>Branded PDF export</li>
             <li>Full report history</li>
             <li>Priority support</li>
@@ -444,7 +409,6 @@ h2.sh em{font-style:italic;color:#F28C28;}
       </div>
     </div>
   </div>
-
   <div class="footer-cta-sec">
     <h2 class="footer-cta-h">The shift doesn't wait.<br><em>Neither should your reporting.</em></h2>
     <p class="footer-cta-sub">Join maintenance teams, warehouse operations, and industrial facilities already using ShiftLogic AI.</p>
@@ -460,12 +424,13 @@ h2.sh em{font-style:italic;color:#F28C28;}
     <div class="auth-card">
       <div class="auth-title">Start Free Trial</div>
       <p class="auth-sub">5 free reports. No credit card. <a onclick="showScreen('login')">Already have an account?</a></p>
-      <div class="trial-badge"><strong>Free Trial Includes:</strong><br>✓ 5 AI reports &nbsp;✓ All 10 report types &nbsp;✓ PDF export &nbsp;✓ No expiry</div>
+      <div class="trial-badge"><strong>Free Trial Includes:</strong><br>✓ 5 AI reports &nbsp;✓ All 14 report types &nbsp;✓ PDF export &nbsp;✓ No expiry</div>
       <div class="auth-err" id="signup-err"></div>
+      <div class="auth-info" id="signup-info"></div>
       <div class="field"><label>Full Name</label><input type="text" id="signup-name" placeholder="Your name"></div>
       <div class="field"><label>Email Address</label><input type="email" id="signup-email" placeholder="you@company.com"></div>
       <div class="field"><label>Password</label><input type="password" id="signup-pass" placeholder="Min. 6 characters"></div>
-      <button class="auth-submit" onclick="doSignup()">CREATE FREE ACCOUNT →</button>
+      <button class="auth-submit" id="signup-btn" onclick="doSignup()">CREATE FREE ACCOUNT →</button>
       <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
     </div>
   </div>
@@ -480,7 +445,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <div class="auth-err" id="login-err"></div>
       <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="you@company.com"></div>
       <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="Your password"></div>
-      <button class="auth-submit" onclick="doLogin()">LOG IN →</button>
+      <button class="auth-submit" id="login-btn" onclick="doLogin()">LOG IN →</button>
       <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
     </div>
   </div>
@@ -506,54 +471,41 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <button class="pb" onclick="setMode(this,7)"><div class="pn">008</div><div class="pt">Downtime Analysis</div></button>
       <button class="pb" onclick="setMode(this,8)"><div class="pn">009</div><div class="pt">Preventative Maintenance</div></button>
       <button class="pb" onclick="setMode(this,9)"><div class="pn">010</div><div class="pt">Daily Shift Summary</div></button>
+      <button class="pb" onclick="setMode(this,10)"><div class="pn">011</div><div class="pt">Access / PTW Report</div></button>
+      <button class="pb" onclick="setMode(this,11)"><div class="pn">012</div><div class="pt">Equipment Inspection</div></button>
+      <button class="pb" onclick="setMode(this,12)"><div class="pn">013</div><div class="pt">Cleaning / Inspection</div></button>
+      <button class="pb" onclick="setMode(this,13)"><div class="pn">014</div><div class="pt">Readiness Check</div></button>
       <hr class="sidebar-sep">
       <button class="sidebar-link" onclick="showHistory()">📋 Report History</button>
-      <button class="sidebar-link" onclick="openSettings()">⚙ Settings / API Key</button>
       <button class="sidebar-link" onclick="showScreen('marketing')">🏠 Homepage</button>
       <button class="sidebar-link" onclick="doLogout()">← Log Out</button>
     </div>
     <div class="main" id="generatorPanel">
       <div class="mode-bar">
-        <div class="mode-title" id="modeTitle">INCIDENT REPORT TRANSFORMATION</div>
-        <div class="mode-desc" id="modeDesc">Convert raw technician notes into a professional operational incident report</div>
+        <div class="mode-title" id="modeTitle">INCIDENT REPORT</div>
+        <div class="mode-desc" id="modeDesc">Convert raw technician notes into a professional structured incident report</div>
       </div>
-      <!-- CONTEXT FIELDS -->
       <div>
-        <div class="lbl">Report Context</div>
+        <div class="lbl">Context (optional — improves report accuracy)</div>
         <div class="context-row">
-          <div class="ctx-field">
-            <label>Technician / Author</label>
-            <input type="text" id="ctxTech" placeholder="e.g. J. Smith" oninput="saveCtx()">
-          </div>
-          <div class="ctx-field">
-            <label>Site / Area</label>
-            <input type="text" id="ctxSite" placeholder="e.g. Warehouse 2 — Sort Hall" oninput="saveCtx()">
-          </div>
-          <div class="ctx-field">
-            <label>Shift Date &amp; Time</label>
-            <input type="text" id="ctxShift" placeholder="e.g. 26 May 2026 — Night Shift" oninput="saveCtx()">
-          </div>
+          <div class="ctx-field"><div class="ctx-label">Site / Facility</div><input type="text" id="ctxSite" placeholder="e.g. FC Birmingham, Site A"></div>
+          <div class="ctx-field"><div class="ctx-label">Shift</div><input type="text" id="ctxShift" placeholder="e.g. Night Shift, 22:00–06:00"></div>
+          <div class="ctx-field"><div class="ctx-label">Technician / Engineer</div><input type="text" id="ctxTech" placeholder="e.g. J. Smith (optional)"></div>
+        </div>
+        <div class="context-row" style="margin-top:6px">
+          <div class="ctx-field"><div class="ctx-label">Industry / Sector</div><input type="text" id="ctxIndustry" placeholder="e.g. Manufacturing, Fleet, HVAC"></div>
+          <div class="ctx-field"><div class="ctx-label">Asset / Equipment</div><input type="text" id="ctxAsset" placeholder="e.g. CNC-4, AHU-2, Van 23"></div>
+          <div class="ctx-field"><div class="ctx-label">Asset ID / Tag</div><input type="text" id="ctxAssetId" placeholder="e.g. EQ-0421 (optional)"></div>
         </div>
       </div>
-      <!-- QUICK SAMPLES -->
       <div>
         <div class="lbl">Quick Load — Real Examples</div>
-        <div class="quick-group">
-          <button class="quick-btn" onclick="loadSample(0)">ASL4 Label Issue</button>
-          <button class="quick-btn" onclick="loadSample(1)">ADTA B Stoppage</button>
-          <button class="quick-btn" onclick="loadSample(2)">E-Stop Isles 49/50</button>
-          <button class="quick-btn" onclick="loadSample(3)">Conveyor Sensor</button>
-          <button class="quick-btn" onclick="loadSample(4)">ASML1 Label Tear</button>
-        </div>
+        <div class="quick-group" id="quickGroup"></div>
       </div>
-      <!-- NOTES INPUT -->
       <div>
         <div class="lbl">Technician Notes / Raw Input</div>
-        <textarea class="ta" id="notesInput" placeholder="Paste raw notes here — shorthand, abbreviations, anything goes." oninput="onNotesInput()"></textarea>
-        <div class="ta-footer">
-          <span class="char-count" id="charCount">0 characters</span>
-          <span class="shortcut-hint">Ctrl + Enter to generate</span>
-        </div>
+        <textarea class="ta" id="notesInput" placeholder="Paste raw notes here — shorthand, abbreviations, fault codes, anything goes. The more detail you include, the better the report." oninput="updateCharCount()"></textarea>
+        <div class="char-count" id="charCount">0 characters</div>
       </div>
       <div class="actions">
         <button class="gen-btn" id="genBtn" onclick="generate()">⚙ GENERATE REPORT</button>
@@ -569,11 +521,13 @@ h2.sh em{font-style:italic;color:#F28C28;}
           </div>
         </div>
         <div class="out-box" id="outBox"></div>
+        <div class="validation-warn" id="validationWarn"></div>
+        <div class="missing-info" id="missingInfo"></div>
       </div>
     </div>
     <div class="main" id="historyPanel" style="display:none">
       <div class="history-title">Report History</div>
-      <div class="history-sub">All your previously generated reports</div>
+      <div class="history-sub" id="historySubtitle">Your previously generated reports — saved to your account</div>
       <div id="historyList"></div>
     </div>
   </div>
@@ -591,14 +545,14 @@ h2.sh em{font-style:italic;color:#F28C28;}
         <div class="plan-period">per month — cancel anytime</div>
         <ul class="plan-features-u">
           <li>Unlimited AI report generation</li>
-          <li>All 10 report types</li>
+          <li>All 14 report types</li>
           <li>Branded PDF export</li>
           <li>Report history &amp; archive</li>
           <li>Priority email support</li>
         </ul>
-        <div class="paypal-placeholder" id="paypalContainer">
+        <div class="paypal-placeholder">
           💳 PayPal subscription button will appear here<br>
-          <small style="color:#1a3a55">(Add PayPal Client ID in Settings to activate)</small>
+          <small style="color:#1a3a55">(Add PayPal Client ID to activate)</small>
         </div>
       </div>
       <div class="back-link" onclick="showScreen('app')">← Back to app</div>
@@ -618,710 +572,1082 @@ h2.sh em{font-style:italic;color:#F28C28;}
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
-<div class="modal-overlay" id="settingsModal">
-  <div class="settings-modal">
-    <h3>⚙ Settings</h3>
-    <p class="settings-sub">Configure your API key and default report context. All settings are saved locally in your browser.</p>
-    <div class="settings-group">
-      <div class="settings-group-title">API Configuration</div>
-      <div class="settings-field">
-        <label>Anthropic API Key</label>
-        <input type="password" id="settingsApiKey" placeholder="sk-ant-api03-…">
-        <div class="settings-note">Required to generate reports. Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:#F28C28">console.anthropic.com</a>. Stored locally — never sent anywhere except Anthropic's API.</div>
-      </div>
-    </div>
-    <div class="settings-group">
-      <div class="settings-group-title">Default Report Context</div>
-      <div class="settings-field">
-        <label>Company / Organisation Name</label>
-        <input type="text" id="settingsCompany" placeholder="e.g. Tencian Logistics Ltd">
-        <div class="settings-note">Appears on PDF headers and in report context.</div>
-      </div>
-      <div class="settings-field">
-        <label>Default Site / Facility</label>
-        <input type="text" id="settingsSite" placeholder="e.g. Coventry DC — Sort Hall">
-      </div>
-    </div>
-    <div class="settings-btns">
-      <button class="settings-cancel" onclick="closeSettings()">Cancel</button>
-      <button class="settings-save" onclick="saveSettings()">SAVE SETTINGS</button>
-    </div>
-  </div>
-</div>
-
 <script>
-const FREE_LIMIT = 5;
+// ══════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════
+// ShiftLogic AI v6 — Production Frontend
+// Pipeline: classify → generate → validate → save-report
+// API key is NOT here. It lives in the Netlify environment variable
+// ANTHROPIC_API_KEY on the server. Never put it in this file.
+const AUTH_ENDPOINT        = '/.netlify/functions/auth';
+const CLASSIFY_ENDPOINT    = '/.netlify/functions/classify';
+const GENERATE_ENDPOINT    = '/.netlify/functions/generate';
+const VALIDATE_ENDPOINT    = '/.netlify/functions/validate';
+const SAVE_REPORT_ENDPOINT = '/.netlify/functions/save-report';
+const REPORTS_ENDPOINT     = '/.netlify/functions/reports';
+// API keys live in Netlify env vars. Never reference ANTHROPIC_API_KEY or SUPABASE_SERVICE_KEY here.
+const FREE_LIMIT  = 5;
+const MODEL       = 'claude-sonnet-4-6';
+const MAX_TOKENS  = 1500;
 
-let currentUser = null;
+let currentUser = null;   // { id, name, email, plan, reportsUsed }
+let authToken   = null;   // JWT — stored in sessionStorage
 let currentMode = 0;
 let lastReportText = '';
-let lastReportMeta = {};
 
-// ── SETTINGS ──
-function getSettings(){
-  try{return JSON.parse(localStorage.getItem('sl_settings')||'{}');}catch(e){return{};}
-}
-function saveSettingsToStorage(s){localStorage.setItem('sl_settings',JSON.stringify(s));}
-function getApiKey(){return getSettings().apiKey||'';}
+// In-memory cache for history loaded from the server this session
+let historyCache = null;
 
-function openSettings(){
-  const s=getSettings();
-  document.getElementById('settingsApiKey').value=s.apiKey||'';
-  document.getElementById('settingsCompany').value=s.company||'';
-  document.getElementById('settingsSite').value=s.site||'';
-  document.getElementById('settingsModal').classList.add('show');
-}
-function closeSettings(){document.getElementById('settingsModal').classList.remove('show');}
-function saveSettings(){
-  const s={
-    apiKey:document.getElementById('settingsApiKey').value.trim(),
-    company:document.getElementById('settingsCompany').value.trim(),
-    site:document.getElementById('settingsSite').value.trim()
-  };
-  saveSettingsToStorage(s);
-  closeSettings();
-  checkApiBanner();
-  if(s.site&&!document.getElementById('ctxSite').value){
-    document.getElementById('ctxSite').value=s.site;
-  }
-}
-function checkApiBanner(){
-  const banner=document.getElementById('apiBanner');
-  if(!getApiKey()){banner.classList.remove('hidden');}
-  else{banner.classList.add('hidden');}
-}
-
-// ── CONTEXT FIELDS ──
-function saveCtx(){
-  const ctx={tech:document.getElementById('ctxTech').value,site:document.getElementById('ctxSite').value,shift:document.getElementById('ctxShift').value};
-  localStorage.setItem('sl_ctx',JSON.stringify(ctx));
-}
-function loadCtx(){
-  try{
-    const ctx=JSON.parse(localStorage.getItem('sl_ctx')||'{}');
-    if(ctx.tech)document.getElementById('ctxTech').value=ctx.tech;
-    if(ctx.site)document.getElementById('ctxSite').value=ctx.site;
-    if(ctx.shift)document.getElementById('ctxShift').value=ctx.shift;
-  }catch(e){}
-  // Set default shift time if empty
-  if(!document.getElementById('ctxShift').value){
-    const now=new Date();
-    const dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-    const h=now.getHours();
-    const shiftLabel=h>=6&&h<14?'Day Shift':h>=14&&h<22?'Late Shift':'Night Shift';
-    document.getElementById('ctxShift').value=`${dateStr} — ${shiftLabel}`;
-  }
-  // Apply settings defaults
-  const s=getSettings();
-  if(s.site&&!document.getElementById('ctxSite').value){
-    document.getElementById('ctxSite').value=s.site;
-  }
-}
-
-// ── NOTES INPUT ──
-function onNotesInput(){
-  const val=document.getElementById('notesInput').value;
-  document.getElementById('charCount').textContent=val.length+' character'+(val.length!==1?'s':'');
-  localStorage.setItem('sl_draft',val);
-}
-function loadDraft(){
-  const d=localStorage.getItem('sl_draft');
-  if(d){document.getElementById('notesInput').value=d;document.getElementById('charCount').textContent=d.length+' characters';}
-}
-
+// ══════════════════════════════════════════════════════
+// SAMPLE NOTES
+// ══════════════════════════════════════════════════════
 const SAMPLES = [
-  "ASL4 no read issue. SAL labels unreadable. Darkness too high. Printer cleaned and recalibrated.",
-  "ADTA B stopped around 02:21. Paper parcel stuck under transition plate blocking light curtain. Reset after removal.",
-  "E-stop activated Isles 49/50. Unknown trigger. Reset after inspection.",
-  "Conveyor stopped intermittently during startup. Sensor dirty. Cleaned manually. Monitoring required.",
-  "ASML1 labels tearing after around 50 parcels. Peel bar replaced but issue continued. Manual mode used temporarily."
+  ["ADTA B Parcel Block",    "ADTA B stopped around 02:21. Paper parcel stuck under transition plate blocking light curtain. Removed parcel and reset."],
+  ["ADTIA Roller Driver",    "ADTIA stopped by itself. Error says one roller driver might be faulty or not working properly. During day check individual drives, make sure all work and not overheating. Ignore DGS drive, that is normal/different. Interruption 2 minutes B transverse conveyor."],
+  ["Motor Trip / MCC",       "Motor tripped again. E-stop active. Pneumatic pressure low. Restarted MCC. Monitoring."],
+  ["ASL4 No Read / Labels",  "ASL4 no read issue. SAL labels unreadable. Darkness too high. Printer cleaned and recalibrated."],
+  ["ASML1 Label Tear",       "ASML1 labels tearing after around 50 parcels. Peel bar replaced but issue continued. Manual mode used temporarily."],
+  ["E-Stop Isles 49/50",     "E-stop activated Isles 49/50. Unknown trigger. Checked area, reset after inspection. No damage seen."],
+  ["Cognex / Cleaning",      "Cleanliness checked. Vacuum plate applicator, thermal bar, sensors, pulleys, blower bar, belt and roller conveyors, especially label remnants around Cognex cameras. HMI checked. Labels removed from belt and rollers."],
+  ["DMV1 Readiness Check",   "DMV1 night shift. Pre-start OK 00:30. E-stop cord visual inspection OK 00:45. Hourly walk OK. No unusual noises. Belts checked. No conveyor damage. Capacity visually checked. Fingers A B C D and flat belt checked running middle. Safety checked. Side guards OK. Labels removed from belts and rollers. ASLs cleaned. Spare parts stock checked. No serious conveyor faults."],
+  ["Pneumatic PM Weekly",    "Weekly task done. Dewater pneumatic maintenance unit and empty condensate collection tank. Clean pneumatic filter Saturday. OK."],
+  ["PTW Access Issue",       "DNM8. Arrived on site. Badge registered first, pre-start done. Then management said no PTW registered and I must leave hall. Spoke with Felipe. Waited for L3/L4 manager. They checked and still said no access. Left site. Gave phone number, available if critical fault. No conveyor fault handled."]
 ];
 
+// ══════════════════════════════════════════════════════
+// REPORT MODES — SH2 INDUSTRIAL REPORTING STANDARD
+// ══════════════════════════════════════════════════════
+const SH2_RULES = `
+SHIFTLOGIC AI — UNIVERSAL INDUSTRIAL REPORTING STANDARDS:
+
+NEVER INVENT:
+- Downtime figures not stated in the notes
+- Personnel names, site names, or shift times unless stated
+- Equipment IDs, serial numbers, model numbers, or part references
+- Root causes, fault codes, or error messages not mentioned in the notes
+- Actions not explicitly described
+
+MISSING INFORMATION — use one of these phrases:
+- "Not specified"
+- "To be verified"
+- "Further inspection required"
+- "Not confirmed based on available information"
+
+ROOT CAUSE STATUS — always one of three:
+- CONFIRMED: use only when the notes prove the cause AND a corrective action confirms resolution
+- SUSPECTED: when evidence points to a likely cause but full verification is missing
+- UNKNOWN: when the cause is not clear from the available information
+
+LANGUAGE:
+- Professional, neutral, and factual — suitable for technicians, supervisors, managers, auditors, and site leadership
+- Do not blame personnel without clear supporting evidence from the notes
+- Do not downplay safety events; do not exaggerate routine faults
+- Routine checks, inspections, and PM tasks must not read as fault reports
+- Safety-critical systems (fire safety, medical gas, pressure systems, electrical isolation, lifting equipment, cleanrooms) require a dedicated Safety / Compliance Impact section
+
+PRESERVE EXCLUSIONS:
+- If the notes explicitly exclude a component or system (e.g. "ignore X — that is normal"), do not treat it as a fault cause
+- Record excluded components as confirmed normal for that condition
+
+PRESERVE TECHNICAL TERMS:
+- Keep all equipment names, system codes, fault codes, error codes, OBD codes, and technical identifiers exactly as written
+- Do not translate, paraphrase, or replace technical terms with generic words
+
+SEPARATE IMPACTS:
+- Operational impact: production loss, service interruption, asset or line unavailability
+- Safety impact: injury risk, fire safety, pressure hazard, electrical safety, structural safety
+- Compliance / hygiene impact (food, pharma, water, medical, cleanroom): product quality, contamination risk, regulatory or audit status — include only when relevant to the notes
+
+MINIMAL NOTES WARNING:
+If the original notes contain fewer than 20 meaningful words, you must:
+- State at the top of the report: "Note: Minimal information available. Report completeness is limited by the detail provided."
+- Use UNKNOWN for all root cause fields.
+- Do not infer asset type, industry, or cause from symptom description alone.
+- Every field with no supporting evidence must read "Not specified" — not a guess or inference.
+
+SYMPTOM vs CAUSE:
+A symptom (slow speed, noise, vibration, overheating, stopped, tripped) is NOT evidence of a specific root cause unless the notes explicitly connect the two.
+Do not diagnose from symptom alone.
+- "Belt running slowly" = SYMPTOM only.
+- "Belt running slowly — tension too high" = cause only if the technician stated this connection.
+- "Machine making noise — could be bearing" = SUSPECTED bearing, only if the technician stated this.
+If the connection is not in the notes, the root cause is UNKNOWN or SUSPECTED with the symptom as the only evidence.
+
+PENDING TEST RESULTS:
+If the notes state that a test result, sample result, biological indicator, or inspection outcome is "pending," "awaited," or "due tomorrow," you must write "Result awaited — not available at time of report" and must NOT invent or speculate about the outcome.
+
+STANDARD PHRASES:
+- "The root cause could not be fully confirmed based on the available information."
+- "The suspected cause is…"
+- "Further monitoring is recommended."
+- "No significant operational impact was observed."
+- "The system / asset was returned to operational condition."
+- "The asset was removed from service pending further inspection."
+- "No clear technical fault was confirmed during the inspection."
+- "Further inspection is required to confirm the root cause."
+- "No injury was reported."
+- "The fault should be monitored during normal operational load."
+`;
+
 const MODES = [
-  {title:"INCIDENT REPORT TRANSFORMATION",desc:"Convert raw technician notes into a professional operational incident report",sys:`You are an expert industrial maintenance documentation specialist for ShiftLogic AI. Transform raw technician notes — however messy, abbreviated, or incomplete — into a structured professional incident report.
+  {
+    title: "INCIDENT REPORT",
+    desc: "Convert raw technician notes into a professional structured incident report",
+    sys: `You are a senior industrial maintenance documentation specialist for ShiftLogic AI. Convert raw technician notes into a structured professional incident report following SH2 standards.
 
-CRITICAL RULES:
-- Never invent or assume technical details not present in the notes
-- Preserve all equipment identifiers exactly (ASL4, ADTA B, MCC, DBE2, Line 3, Isles 49/50, etc.)
-- Expand abbreviations where safe: MCC=Motor Control Centre, ASL=Auto Sortation Lane, ADTA=Automated Delivery Transfer Area, HMI=Human Machine Interface, E-stop=Emergency Stop, PTW=Permit to Work, KDR/HDR=drive error codes, SAL=Scan and Label
-- If root cause is unknown, write "Root cause unknown at time of report — under investigation"
-- If a time is mentioned, include it precisely. If no time is given, do not invent one.
-- Use professional, confident, factual industrial maintenance language throughout
-- Keep each section focused and factual — no padding, no filler sentences
+${SH2_RULES}
 
-INDUSTRIES UNDERSTOOD: Warehousing, conveyor systems, manufacturing, packaging, automotive, pneumatics, electrical, robotics, sortation, food & beverage, facilities management.
-
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 INCIDENT TITLE
 FAULT DESCRIPTION
-ROOT CAUSE ANALYSIS
+FAULT TIMELINE
+ROOT CAUSE ASSESSMENT
 CORRECTIVE ACTIONS TAKEN
 DOWNTIME SUMMARY
 RESOLUTION STATUS
-FOLLOW-UP RECOMMENDATIONS`},
+FOLLOW-UP RECOMMENDATIONS
 
-  {title:"SHIFT HANDOVER SUMMARY",desc:"Convert notes into a clear professional handover for the incoming shift",sys:`You are a shift supervisor documentation specialist for ShiftLogic AI. Convert raw end-of-shift notes into a structured handover the incoming team can act on immediately.
+Rules per section:
+- INCIDENT TITLE: concise and accurate (e.g. "ADTA B Stoppage — Parcel Blocking Light Curtain" or "Motor Trip with E-Stop Activation")
+- ROOT CAUSE ASSESSMENT: state CONFIRMED / SUSPECTED / UNKNOWN and explain. If a part replacement did not fix the issue, state the root cause remains unconfirmed and wider inspection is required.
+- DOWNTIME SUMMARY: if no figure given, write "Downtime duration: Not specified."
+- RESOLUTION STATUS: use one of — Resolved / Temporary fix in place / Under investigation / Monitoring required
+- Always include FOLLOW-UP RECOMMENDATIONS even if the fault was resolved.`
+  },
+  {
+    title: "SHIFT HANDOVER",
+    desc: "Convert shift notes into a clear professional handover for the incoming shift",
+    sys: `You are a shift supervisor documentation specialist for ShiftLogic AI. Convert outgoing shift notes into a structured shift handover summary for the incoming team.
 
-CRITICAL RULES:
-- The incoming shift must know exactly what is happening, what needs watching, and what is unresolved
-- State clearly if equipment is running, stopped, being monitored, or in manual mode — never leave this ambiguous
-- Preserve all equipment identifiers (ASL, ADTA, MCC, conveyor IDs, line numbers)
-- State unresolved issues explicitly with current status
-- Include all safety concerns clearly — PTW status, E-stops, safety door issues, isolation notices
-- Be direct and actionable. The incoming shift is often walking in cold.
-- Do not pad. Short, clear sentences are better than long ones.
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 HANDOVER SUMMARY
 OPEN ISSUES
-PENDING ACTIONS
+ACTIONS COMPLETED
 MONITORING REQUESTS
 SAFETY CONCERNS
 ESCALATIONS
-NOTES FOR INCOMING SHIFT`},
+NOTES FOR INCOMING SHIFT
 
-  {title:"ROOT CAUSE ANALYSIS",desc:"Identify root causes, contributing factors, and prevention measures",sys:`You are a senior industrial root cause analysis specialist for ShiftLogic AI. Analyse incident notes and produce a structured RCA identifying not just what happened, but why — and how to prevent recurrence.
+Rules:
+- OPEN ISSUES: faults or incidents not yet fully resolved. If none: "No open issues at time of handover."
+- ACTIONS COMPLETED: what was done and resolved this shift. Be specific about equipment and outcomes.
+- MONITORING REQUESTS: list specific equipment or areas that need watching next shift with reason why.
+- SAFETY CONCERNS: if none: "No active safety concerns at time of handover."
+- ESCALATIONS: if none: "No escalations required at this time."
+- NOTES FOR INCOMING SHIFT: practical, direct guidance. What to watch, what to avoid, who to contact if X happens.`
+  },
+  {
+    title: "ROOT CAUSE ANALYSIS",
+    desc: "Identify root causes, contributing factors, and prevention measures",
+    sys: `You are an industrial root cause analysis specialist for ShiftLogic AI. Analyse raw incident notes and produce a structured RCA report following SH2 standards.
 
-CRITICAL RULES:
-- Distinguish clearly between probable root cause and contributing factors
-- If multiple causes are possible, list in order of probability
-- Never state root cause as definitive if notes say "unknown" — qualify it appropriately
-- Apply 5-Why thinking to dig beneath surface symptoms
-- Prevention measures must be specific and actionable, not vague
-- Common root causes in industrial settings: sensor misalignment, settings drift, wear and tear, obstructions, electrical faults, pneumatic pressure loss, PLC/software errors, human error, inadequate maintenance intervals
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 INCIDENT OVERVIEW
 PROBABLE ROOT CAUSE
-CONTRIBUTING OPERATIONAL FACTORS
+CONTRIBUTING FACTORS
+EVIDENCE SUPPORTING ROOT CAUSE
+EVIDENCE GAPS OR UNCERTAINTIES
 RECURRING FAILURE RISKS
-PREVENTATIVE MEASURES RECOMMENDED`},
+PREVENTATIVE MEASURES RECOMMENDED
 
-  {title:"RECURRING FAULT DETECTION",desc:"Identify repeated failures and patterns from multiple incidents",sys:`You are an operational intelligence analyst for ShiftLogic AI. Analyse multiple incidents or fault logs to identify patterns, repeat failures, and systemic weaknesses across the operation.
+Rules:
+- PROBABLE ROOT CAUSE: state CONFIRMED / SUSPECTED / UNKNOWN. If not determinable: "Root cause could not be fully confirmed based on the available information. Further investigation is required."
+- CONTRIBUTING FACTORS: secondary conditions — operational, environmental, maintenance history. Include parcel spacing/orientation issues if relevant.
+- EVIDENCE GAPS: honestly list what information is missing. This section is critical — do not skip it.
+- If a component was replaced but the fault continued, state that the replaced component was not the confirmed root cause.
+- Do not reach conclusions beyond what the evidence supports.
+- MINIMUM EVIDENCE THRESHOLD: If the EVIDENCE SUPPORTING ROOT CAUSE section would be empty or contain only one data point, do not construct a causal chain. State in PROBABLE ROOT CAUSE: "Root cause could not be determined. Insufficient information to support a causal analysis." List in EVIDENCE GAPS exactly what information would be needed. Do not produce a speculative 5-Why chain — every step requires evidence from the notes.`
+  },
+  {
+    title: "RECURRING FAULT DETECTION",
+    desc: "Identify repeated failures and patterns from multiple incidents",
+    sys: `You are an operational intelligence and reliability analyst for ShiftLogic AI. Analyse multiple incident descriptions and identify recurring failure patterns, shared root causes, and maintenance priorities.
 
-CRITICAL RULES:
-- Look for the same equipment appearing multiple times
-- Look for the same fault type across different equipment (multiple E-stops, multiple label no-reads, multiple resets)
-- Look for time patterns (same shift period, same day of week, post-restart)
-- Identify which faults recurred after resolution — this is a critical signal
-- Be specific about which assets are weak points — do not generalise
-- Prioritise by operational impact, not just frequency
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 ANALYSIS SUMMARY
-REPEATED EQUIPMENT FAILURES
-RECURRING OPERATIONAL PATTERNS
-COMMON DOWNTIME CAUSES
-SYSTEM WEAK POINTS
-PREVENTATIVE MAINTENANCE PRIORITIES`},
+IDENTIFIED RECURRING FAILURES
+PATTERN ANALYSIS
+SHARED ROOT CAUSES
+HIGHEST-RISK EQUIPMENT OR SYSTEMS
+MAINTENANCE PRIORITIES
+RECOMMENDED ACTIONS
 
-  {title:"MANAGEMENT SUMMARY",desc:"Convert technical incidents into a clear executive-level summary",sys:`You are a management reporting specialist for ShiftLogic AI. Convert complex technical incidents into a concise, non-technical executive summary readable in under two minutes.
+Rules:
+- If only one incident is provided: note that pattern detection requires multiple incidents, then analyse the single incident for recurring risk indicators only.
+- PATTERN ANALYSIS: look for shared equipment type, shared fault type (sensor contamination, mechanical wear, seal failure, pressure instability, calibration drift, electrical fault), shared timing patterns, or shared operating conditions that may be a contributing factor.
+- Do not claim a confirmed pattern unless it is supported by at least two matching incidents.
+- SHARED ROOT CAUSES: only list causes that appear in more than one incident. Do not invent connections.`
+  },
+  {
+    title: "MANAGEMENT SUMMARY",
+    desc: "Convert technical incidents into a clear non-technical executive summary",
+    sys: `You are a management reporting specialist for ShiftLogic AI. Convert technical maintenance notes into a clear executive summary for site management, operations directors, or non-technical stakeholders.
 
-CRITICAL RULES:
-- Remove all technical jargon — translate codes to plain language (ASL4 = Auto Sortation Lane 4, MCC reset = electrical panel restart, E-stop = Emergency Stop)
-- Lead with operational impact: what stopped, for how long, what was the business effect
-- Management cares about three things: downtime impact, risk of recurrence, recommended action
-- Be direct. No padding. If it was minor, say so. If serious, explain clearly.
-- If multiple incidents provided, give overall picture first then individual summaries
-- Write as if briefing a non-technical operations director
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 EXECUTIVE SUMMARY
 OPERATIONAL IMPACT
 DOWNTIME OVERVIEW
-MAJOR RISKS IDENTIFIED
-RECOMMENDED ACTIONS
-FINANCIAL/PRODUCTIVITY IMPLICATIONS`},
+ACTIONS TAKEN
+CURRENT STATUS
+RISKS IDENTIFIED
+RECOMMENDED MANAGEMENT ACTIONS
+FINANCIAL / PRODUCTIVITY IMPLICATIONS
 
-  {title:"CRITICAL INCIDENT ESCALATION",desc:"Generate a high-priority escalation report for urgent incidents",sys:`You are a critical incident response coordinator for ShiftLogic AI. Generate an escalation report for incidents requiring immediate management attention, engineering support, or safety response.
+Rules:
+- Write in non-technical language. Where technical terms must appear, briefly explain them in plain English.
+- OPERATIONAL IMPACT: describe impact on production, throughput, or service levels in practical terms.
+- DOWNTIME OVERVIEW: if not in notes, write "Downtime duration not recorded. Recording recommended for future trend analysis."
+- RISKS IDENTIFIED: focus on what could happen if recurring faults are not addressed.
+- FINANCIAL / PRODUCTIVITY IMPLICATIONS: only include if figures are in the notes. Otherwise: "No specific financial data available. Continued recurrence may affect operational efficiency."
+- Keep it concise and scannable — management summaries should not read like technical reports.`
+  },
+  {
+    title: "CRITICAL ESCALATION",
+    desc: "Generate a high-priority escalation report for critical or repeated incidents",
+    sys: `You are a critical incident response documentation specialist for ShiftLogic AI. Convert raw notes about a critical or repeated fault into a structured high-priority escalation report.
 
-CRITICAL RULES:
-- Lead with urgency — the reader must know within the first line that this is serious
-- Be specific about safety risks: E-stop activations, safety door faults, PTW breaches, electrical fault, fire, trapped personnel
-- State exactly what was done and what has NOT yet been done
-- Containment actions must be concrete — "monitoring" is not a containment action
-- Escalation recommendations must name specific roles (shift manager, maintenance engineer, site safety officer, OEM support)
-- If system is currently offline or in manual mode, state this at the top
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 URGENCY LEVEL
 INCIDENT DESCRIPTION
 OPERATIONAL IMPACT
 SAFETY CONCERNS
 IMMEDIATE ACTIONS REQUIRED
-TEMPORARY CONTAINMENT ACTIONS
-ESCALATION RECOMMENDATIONS`},
+TEMPORARY CONTAINMENT ACTIONS TAKEN
+ESCALATION RECOMMENDATIONS
+FOLLOW-UP ACTIONS
 
-  {title:"TECHNICIAN NOTE CLEANUP",desc:"Clean and standardise messy notes while preserving all technical meaning",sys:`You are a technical documentation editor for ShiftLogic AI. Clean raw messy technician notes into clear professional language — without losing technical meaning or inventing any details.
+Rules:
+- URGENCY LEVEL: CRITICAL / HIGH / MEDIUM with one-line justification. Repeated faults in same shift = HIGH minimum.
+- SAFETY CONCERNS: if none in notes: "No immediate safety concerns identified based on available information. Verify on site before resuming full operation."
+- ESCALATION RECOMMENDATIONS: be specific — who needs to be notified, what they need to do, and by when.
+- Write for speed — this will be read under pressure. Direct, no padding.
+- Critical escalation can use stronger language but must remain factual and professional.`
+  },
+  {
+    title: "NOTE CLEANUP",
+    desc: "Clean and standardise messy or abbreviated technician notes",
+    sys: `You are a technical documentation editor for ShiftLogic AI. Clean, clarify, and standardise raw technician notes while preserving all technical content and meaning.
 
-CRITICAL RULES:
-- Preserve ALL equipment identifiers, fault codes, and technical terms exactly as written
-- Expand abbreviations where clearly safe: E-stop, MCC, ASL, ADTA, HMI, PTW, KDR, HDR, SAL
-- Fix grammar and spelling but keep technical vocabulary intact
-- Do not add information not in the original notes
-- Do not remove information — even minor details may matter operationally
-- Format timestamps consistently (e.g. 02:21, ~2 minutes, 07:08–07:12)
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
-CLEANED NOTES
+Use EXACTLY these section headers (each on its own line, in uppercase):
+STANDARDISED NOTES
 TECHNICAL TERMS PRESERVED
+ABBREVIATIONS EXPANDED
 AMBIGUITIES RESOLVED
-STANDARDIZED VERSION`},
+INFORMATION MISSING OR UNCLEAR
 
-  {title:"DOWNTIME IMPACT ANALYSIS",desc:"Analyse downtime events to identify bottlenecks, cost, and improvement opportunities",sys:`You are an operational downtime analyst for ShiftLogic AI. Analyse provided downtime events and produce a structured impact assessment that quantifies the situation and surfaces improvement priorities.
+Rules:
+- STANDARDISED NOTES: rewrite in clean professional British technical English. Do not add any information not present in the original. Do not add a full incident report — just clean the notes.
+- TECHNICAL TERMS PRESERVED: list all technical terms, equipment codes, fault codes, system identifiers, and diagnostic codes found in the notes — confirm each is preserved exactly as written.
+- ABBREVIATIONS EXPANDED: list abbreviations and likely meanings (e.g. "PTW = Permit to Work", "MCC = Motor Control Centre"). Mark ambiguous ones.
+- AMBIGUITIES RESOLVED: flag parts where meaning was unclear and explain how it was interpreted.
+- INFORMATION MISSING OR UNCLEAR: list fields a formal report would need that are absent (site, shift, time, downtime, technician name).
+- Do not note cleanup output as suspected or confirmed — that is for incident reports.`
+  },
+  {
+    title: "DOWNTIME ANALYSIS",
+    desc: "Analyse downtime events to identify patterns, bottlenecks, and impact",
+    sys: `You are an operational downtime and reliability analyst for ShiftLogic AI. Analyse maintenance notes and produce a structured downtime impact analysis.
 
-CRITICAL RULES:
-- Separate planned maintenance downtime from unplanned fault downtime
-- Identify which equipment caused the most cumulative downtime — this is the priority target
-- If timestamps are available, calculate or estimate total downtime duration
-- Identify bottleneck equipment — faults on high-throughput lines cost more than faults on low-throughput lines
-- Be specific and quantified wherever possible: "conveyor stopped 4 times in 8 hours" beats "conveyor unreliable"
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 DOWNTIME ANALYSIS SUMMARY
-TOTAL DOWNTIME IMPACT
-HIGHEST-RISK EQUIPMENT
-OPERATIONAL BOTTLENECKS
+TOTAL DOWNTIME RECORDED
+HIGHEST-IMPACT INCIDENTS
+EQUIPMENT AT HIGHEST RISK
+OPERATIONAL BOTTLENECKS IDENTIFIED
 REPEATED FAILURE CAUSES
-MAINTENANCE IMPROVEMENT SUGGESTIONS`},
+COST AND PRODUCTIVITY IMPACT
+MAINTENANCE IMPROVEMENT RECOMMENDATIONS
 
-  {title:"PREVENTATIVE MAINTENANCE RECOMMENDATIONS",desc:"Generate PM recommendations based on fault history and operational patterns",sys:`You are a preventative maintenance strategist for ShiftLogic AI. Based on fault history, incident patterns, or operational notes, generate a structured PM plan that reduces the risk of future failures.
+Rules:
+- TOTAL DOWNTIME RECORDED: add up all stated durations. If none given: "Downtime figures not included in notes. Cannot calculate total."
+- A 2-minute interruption is short and localised — do not describe it as major.
+- COST AND PRODUCTIVITY IMPACT: only if figures are in the notes. Otherwise: "No specific financial data available from the provided notes."
+- MAINTENANCE IMPROVEMENT RECOMMENDATIONS: base on observed data only. Distinguish confirmed findings from inferences.`
+  },
+  {
+    title: "PREVENTATIVE MAINTENANCE",
+    desc: "Generate PM recommendations from incident data and fault patterns",
+    sys: `You are a preventative maintenance strategist for ShiftLogic AI. Analyse maintenance notes and produce structured PM recommendations.
 
-CRITICAL RULES:
-- PM recommendations must be specific and actionable, not generic
-- Prioritise by risk: faults causing full-line stoppage take priority over minor delay faults
-- Include realistic inspection intervals based on operational intensity (weekly for high-cycle conveyors, monthly for low-use equipment)
-- Reference specific equipment identified in the notes by name
-- Where spare parts are mentioned in incidents, flag them as recommended stock items to keep on hand
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 PM STRATEGY OVERVIEW
 IDENTIFIED WEAK POINTS
-INSPECTION PRIORITIES
-RECOMMENDED MAINTENANCE INTERVALS
+RECOMMENDED INSPECTION PRIORITIES
+SUGGESTED MAINTENANCE INTERVALS
+COMPONENTS AT RISK OF FAILURE
 OPERATIONAL RISK AREAS
-RELIABILITY IMPROVEMENT ACTIONS`},
+RELIABILITY IMPROVEMENT ACTIONS
+MONITORING REQUIREMENTS
 
-  {title:"DAILY SHIFT SUMMARY",desc:"Generate a complete professional daily operational shift summary",sys:`You are a daily operations reporter for ShiftLogic AI. Compile raw shift notes into a complete professional summary capturing what happened, what is outstanding, and what the next shift needs to know.
+Rules:
+- IDENTIFIED WEAK POINTS: based only on what the notes show — list the specific components, systems, or conditions that the evidence indicates are vulnerable. Do not add weak points not evidenced by the notes.
+- SUGGESTED MAINTENANCE INTERVALS: only make specific interval recommendations where the notes or observed fault pattern supports them. Otherwise: "Interval to be determined based on further monitoring and fault history."
+- COMPONENTS AT RISK: only list components actually mentioned or implied in the notes. Do not add generic components not evidenced by the data.
+- All recommendations must trace back to evidence in the notes. No generic advice unconnected to the observed faults.`
+  },
+  {
+    title: "DAILY SHIFT SUMMARY",
+    desc: "Generate a complete structured daily operational summary",
+    sys: `You are a daily operations documentation specialist for ShiftLogic AI. Convert raw shift notes into a complete, structured daily shift summary.
 
-CRITICAL RULES:
-- Structure the summary chronologically where timestamps are available
-- Separate resolved incidents from ongoing issues clearly
-- Include any equipment currently in manual mode, isolated, or under active monitoring
-- Note safety events, near misses, or access restrictions (PTW status, E-stop history)
-- Recommendations for Next Shift must be actionable and specific — not vague advice
-- If spare parts were used during the shift, note what was consumed so stock can be replenished
+${SH2_RULES}
 
-Use EXACTLY these section headers (on their own line, no colon):
+Use EXACTLY these section headers (each on its own line, in uppercase):
 SHIFT OVERVIEW
+READINESS CHECKS COMPLETED
 MAJOR INCIDENTS
 DOWNTIME OVERVIEW
-COMPLETED ACTIONS
+COMPLETED MAINTENANCE ACTIONS
+CLEANING AND INSPECTION ACTIVITIES
 UNRESOLVED ISSUES
-SHIFT PERFORMANCE OBSERVATIONS
-RECOMMENDATIONS FOR NEXT SHIFT`}
+MONITORING REQUIREMENTS
+RECOMMENDATIONS FOR NEXT SHIFT
+
+Rules:
+- SHIFT OVERVIEW: site, shift period, general summary. Where not specified: "Not specified."
+- READINESS CHECKS COMPLETED: include any pre-start checks, safety system checks, walk-arounds, or formal inspection items mentioned. If none: "No readiness checks recorded in these notes."
+- MAJOR INCIDENTS: list each separately. If none: "No major incidents recorded during this shift."
+- DOWNTIME OVERVIEW: list all mentioned periods. If none: "Downtime data not recorded in these notes."
+- UNRESOLVED ISSUES: if none: "No outstanding issues at shift end."
+- This report covers both fault and no-fault shifts. A quiet shift with clean checks is a valid and useful report.`
+  },
+  {
+    title: "ACCESS / PTW REPORT",
+    desc: "Document access restrictions, permit to work issues, or site entry problems",
+    sys: `You are an industrial site operations documentation specialist for ShiftLogic AI. Convert raw notes about a site access issue or Permit to Work (PTW) problem into a structured, factual access report.
+
+${SH2_RULES}
+
+Use EXACTLY these section headers (each on its own line, in uppercase):
+INCIDENT TITLE
+INCIDENT DESCRIPTION
+TEAM ON SITE
+OPERATIVE IMPACT
+ACTIONS TAKEN
+POSSIBLE FOLLOW-UP ACTIONS
+STATUS
+
+Rules:
+- Stay completely neutral. Do not blame the technician, site management, or any individual.
+- Describe the sequence of events exactly as described in the notes.
+- OPERATIVE IMPACT: state what maintenance work was or was not carried out as a result.
+- STATUS: state the final outcome (e.g. "Access not granted. Technician left site as instructed by management.")
+- POSSIBLE FOLLOW-UP ACTIONS: focus on process improvements to prevent recurrence (PTW verification before arrival, access confirmation procedures, etc.).
+- Do not add legal or contractual commentary.`
+  },
+  {
+    title: "EQUIPMENT INSPECTION REPORT",
+    desc: "Document a planned or reactive equipment inspection, condition assessment, or fault investigation",
+    sys: `You are an industrial equipment inspection documentation specialist for ShiftLogic AI. Convert raw inspection notes into a structured professional inspection report suitable for any type of equipment, asset, or system across any industry.
+
+${SH2_RULES}
+
+Use EXACTLY these section headers (each on its own line, in uppercase):
+INSPECTION TITLE
+INSPECTION SUMMARY
+OPERATING CONDITIONS DURING INSPECTION
+FINDINGS
+ROOT CAUSE / SUSPECTED CAUSE
+CORRECTIVE ACTIONS TAKEN
+OPERATIONAL IMPACT
+SAFETY / COMPLIANCE IMPACT
+FOLLOW-UP ACTIONS
+STATUS
+
+Rules per section:
+- INSPECTION TITLE: brief and descriptive (e.g. "CNC-4 Spindle Alarm Investigation", "AHU-2 Cooling Failure Inspection", "ASML1 Label Tearing Investigation", "Fire Door F12 Closer Check")
+- INSPECTION SUMMARY: brief overview of what was inspected, why, and under what circumstances
+- OPERATING CONDITIONS DURING INSPECTION: if the inspection was under non-standard conditions (reduced staffing, slow pace, adverse weather, partial load, safe system conditions, safety equipment isolated), clearly state this and note that findings cannot be treated as fully representative of normal operation
+- FINDINGS: list observations factually. Do not diagnose beyond what the notes state. What was seen, measured, or tested.
+- ROOT CAUSE / SUSPECTED CAUSE: if fault found and resolved, state CONFIRMED with evidence. If unresolved, state SUSPECTED or UNKNOWN. If fault could not be reproduced: "No clear technical fault was confirmed based on the inspection."
+- CORRECTIVE ACTIONS TAKEN: what was done during the inspection — adjusted, cleaned, replaced, tightened, recalibrated, removed from service
+- OPERATIONAL IMPACT: effect on production, service availability, or asset readiness
+- SAFETY / COMPLIANCE IMPACT: include if the equipment is safety-critical (fire systems, pressure vessels, lifting, medical, food contact, cleanroom, electrical isolation). If not applicable: "No specific safety or compliance concern identified during this inspection."
+- FOLLOW-UP ACTIONS: based only on what the inspection found. Practical and specific.
+- STATUS: be precise — "No fault confirmed under inspection conditions" / "Fault resolved" / "Temporary fix in place" / "Asset removed from service pending repair" / "Further inspection required under normal operating conditions"`
+  },
+  {
+    title: "CLEANING / INSPECTION REPORT",
+    desc: "Document cleaning activities, checklist completion, and component inspections",
+    sys: `You are an industrial maintenance and cleanliness documentation specialist for ShiftLogic AI. Convert raw cleaning and inspection notes into a structured, professional report.
+
+${SH2_RULES}
+
+Use EXACTLY these section headers (each on its own line, in uppercase):
+INSPECTION SUMMARY
+AREAS CHECKED
+ACTIONS TAKEN
+OPERATIVE IMPACT
+FOLLOW-UP RECOMMENDATIONS
+STATUS
+
+Rules:
+- This is NOT an incident report. Do not present routine cleaning or inspection as a fault or emergency.
+- AREAS CHECKED: list all components, areas, and systems mentioned in the notes. Preserve all technical terms exactly as written.
+- ACTIONS TAKEN: be specific about what was cleaned, removed, inspected, tested, or verified.
+- OPERATIVE IMPACT: if no impact, state "No significant operational impact was specified during the cleaning activity."
+- FOLLOW-UP RECOMMENDATIONS: practical ongoing actions relevant to the specific areas inspected. Base on what the notes show — do not add generic advice.
+- Preserve all equipment terms exactly as written. Do not replace with generic words.`
+  },
+  {
+    title: "READINESS CHECK SUMMARY",
+    desc: "Document pre-start, routine, or weekly readiness and safety checks",
+    sys: `You are a maintenance readiness and compliance documentation specialist for ShiftLogic AI. Convert raw readiness check notes into a structured, professional check summary.
+
+${SH2_RULES}
+
+Use EXACTLY these section headers (each on its own line, in uppercase):
+CHECK SUMMARY
+READINESS CHECKS COMPLETED
+CONVEYOR AND EQUIPMENT CHECKS
+CLEANING AND MAINTENANCE TASKS
+SPARE PARTS AND STOCK
+FINDINGS
+OPERATIVE IMPACT
+FOLLOW-UP RECOMMENDATIONS
+STATUS
+
+Rules:
+- This is a routine confirmation document, not an incident report. Keep the tone professional and matter-of-fact.
+- READINESS CHECKS COMPLETED: include all pre-start, safety system, walk-around, and statutory checks mentioned in the notes.
+- CONVEYOR AND EQUIPMENT CHECKS: list each check item mentioned — adapt the section title to the industry if needed (e.g. "Vehicle Pre-Use Checks", "Plant and Equipment Checks", "System Readiness Checks").
+- FINDINGS: if no faults: "No damage or abnormal condition was reported based on the available information."
+- OPERATIVE IMPACT: if no impact: "No operational impact was observed or specified."
+- Convert checklist notes into complete professional sentences — do not simply repeat the checklist.
+- Preserve all technical terms, equipment names, and check item names exactly as written.
+- SPARE PARTS AND STOCK: if no spare parts information is in the notes, omit this section entirely.`
+  }
 ];
 
-const HEADERS = ["INCIDENT TITLE","FAULT DESCRIPTION","ROOT CAUSE ANALYSIS","CORRECTIVE ACTIONS TAKEN","DOWNTIME SUMMARY","RESOLUTION STATUS","FOLLOW-UP RECOMMENDATIONS","HANDOVER SUMMARY","OPEN ISSUES","PENDING ACTIONS","MONITORING REQUESTS","SAFETY CONCERNS","ESCALATIONS","NOTES FOR INCOMING SHIFT","INCIDENT OVERVIEW","PROBABLE ROOT CAUSE","CONTRIBUTING OPERATIONAL FACTORS","RECURRING FAILURE RISKS","PREVENTATIVE MEASURES RECOMMENDED","ANALYSIS SUMMARY","REPEATED EQUIPMENT FAILURES","RECURRING OPERATIONAL PATTERNS","COMMON DOWNTIME CAUSES","SYSTEM WEAK POINTS","PREVENTATIVE MAINTENANCE PRIORITIES","EXECUTIVE SUMMARY","OPERATIONAL IMPACT","DOWNTIME OVERVIEW","MAJOR RISKS IDENTIFIED","RECOMMENDED ACTIONS","FINANCIAL/PRODUCTIVITY IMPLICATIONS","URGENCY LEVEL","INCIDENT DESCRIPTION","IMMEDIATE ACTIONS REQUIRED","TEMPORARY CONTAINMENT ACTIONS","ESCALATION RECOMMENDATIONS","CLEANED NOTES","TECHNICAL TERMS PRESERVED","AMBIGUITIES RESOLVED","STANDARDIZED VERSION","DOWNTIME ANALYSIS SUMMARY","TOTAL DOWNTIME IMPACT","HIGHEST-RISK EQUIPMENT","OPERATIONAL BOTTLENECKS","REPEATED FAILURE CAUSES","MAINTENANCE IMPROVEMENT SUGGESTIONS","PM STRATEGY OVERVIEW","IDENTIFIED WEAK POINTS","INSPECTION PRIORITIES","RECOMMENDED MAINTENANCE INTERVALS","OPERATIONAL RISK AREAS","RELIABILITY IMPROVEMENT ACTIONS","SHIFT OVERVIEW","MAJOR INCIDENTS","COMPLETED ACTIONS","UNRESOLVED ISSUES","SHIFT PERFORMANCE OBSERVATIONS","RECOMMENDATIONS FOR NEXT SHIFT"];
+const HEADERS = [
+  // 001 Incident Report
+  "INCIDENT TITLE","FAULT DESCRIPTION","FAULT TIMELINE","ROOT CAUSE ASSESSMENT","CORRECTIVE ACTIONS TAKEN","DOWNTIME SUMMARY","RESOLUTION STATUS","FOLLOW-UP RECOMMENDATIONS",
+  // 002 Shift Handover
+  "HANDOVER SUMMARY","OPEN ISSUES","ACTIONS COMPLETED","PENDING ACTIONS","MONITORING REQUESTS","SAFETY CONCERNS","ESCALATIONS","NOTES FOR INCOMING SHIFT",
+  // 003 RCA
+  "INCIDENT OVERVIEW","PROBABLE ROOT CAUSE","CONTRIBUTING FACTORS","EVIDENCE SUPPORTING ROOT CAUSE","EVIDENCE GAPS OR UNCERTAINTIES","RECURRING FAILURE RISKS","PREVENTATIVE MEASURES RECOMMENDED",
+  // 004 Recurring Fault
+  "ANALYSIS SUMMARY","IDENTIFIED RECURRING FAILURES","PATTERN ANALYSIS","SHARED ROOT CAUSES","HIGHEST-RISK EQUIPMENT OR SYSTEMS","MAINTENANCE PRIORITIES","RECOMMENDED ACTIONS",
+  // 005 Management Summary
+  "EXECUTIVE SUMMARY","OPERATIONAL IMPACT","DOWNTIME OVERVIEW","ACTIONS TAKEN","CURRENT STATUS","RISKS IDENTIFIED","RECOMMENDED MANAGEMENT ACTIONS","FINANCIAL / PRODUCTIVITY IMPLICATIONS",
+  // 006 Critical Escalation
+  "URGENCY LEVEL","INCIDENT DESCRIPTION","OPERATIONAL IMPACT","SAFETY CONCERNS","IMMEDIATE ACTIONS REQUIRED","TEMPORARY CONTAINMENT ACTIONS TAKEN","ESCALATION RECOMMENDATIONS","FOLLOW-UP ACTIONS",
+  // 007 Note Cleanup
+  "STANDARDISED NOTES","TECHNICAL TERMS PRESERVED","ABBREVIATIONS EXPANDED","AMBIGUITIES RESOLVED","INFORMATION MISSING OR UNCLEAR",
+  // 008 Downtime Analysis
+  "DOWNTIME ANALYSIS SUMMARY","TOTAL DOWNTIME RECORDED","HIGHEST-IMPACT INCIDENTS","EQUIPMENT AT HIGHEST RISK","OPERATIONAL BOTTLENECKS IDENTIFIED","REPEATED FAILURE CAUSES","COST AND PRODUCTIVITY IMPACT","MAINTENANCE IMPROVEMENT RECOMMENDATIONS",
+  // 009 PM Recommendations
+  "PM STRATEGY OVERVIEW","IDENTIFIED WEAK POINTS","RECOMMENDED INSPECTION PRIORITIES","SUGGESTED MAINTENANCE INTERVALS","COMPONENTS AT RISK OF FAILURE","OPERATIONAL RISK AREAS","RELIABILITY IMPROVEMENT ACTIONS","MONITORING REQUIREMENTS",
+  // 010 Daily Shift Summary
+  "SHIFT OVERVIEW","READINESS CHECKS COMPLETED","MAJOR INCIDENTS","DOWNTIME OVERVIEW","COMPLETED MAINTENANCE ACTIONS","CLEANING AND INSPECTION ACTIVITIES","UNRESOLVED ISSUES","SHIFT PERFORMANCE OBSERVATIONS","RECOMMENDATIONS FOR NEXT SHIFT",
+  // 011 Access / PTW
+  "INCIDENT DESCRIPTION","TEAM ON SITE","OPERATIVE IMPACT","POSSIBLE FOLLOW-UP ACTIONS",
+  // 012 Equipment Inspection
+  "INSPECTION TITLE","INSPECTION SUMMARY","OPERATING CONDITIONS DURING INSPECTION","FINDINGS","ROOT CAUSE / SUSPECTED CAUSE","CORRECTIVE ACTIONS TAKEN","OPERATIONAL IMPACT","SAFETY / COMPLIANCE IMPACT","FOLLOW-UP ACTIONS","STATUS",
+  // 013 Cleaning / Inspection
+  "INSPECTION SUMMARY","AREAS CHECKED","ACTIONS TAKEN","FOLLOW-UP RECOMMENDATIONS",
+  // 014 Readiness Check
+  "CHECK SUMMARY","READINESS CHECKS COMPLETED","CONVEYOR AND EQUIPMENT CHECKS","CLEANING AND MAINTENANCE TASKS","SPARE PARTS AND STOCK","FINDINGS","OPERATIVE IMPACT","FOLLOW-UP RECOMMENDATIONS"
+];
 
-// ── STORAGE ──
-function getUsers(){try{return JSON.parse(localStorage.getItem('sl_users')||'{}');}catch(e){return{};}}
-function saveUsers(u){localStorage.setItem('sl_users',JSON.stringify(u));}
-function getSession(){try{return JSON.parse(localStorage.getItem('sl_session')||'null');}catch(e){return null;}}
-function saveSession(u){localStorage.setItem('sl_session',JSON.stringify(u));}
-function clearSession(){localStorage.removeItem('sl_session');}
+// ══════════════════════════════════════════════════════
+// SESSION STORAGE — JWT only (no passwords, no user data)
+// ══════════════════════════════════════════════════════
+function getStoredToken(){ return sessionStorage.getItem('sl_token') || null; }
+function getStoredUser(){ try{ return JSON.parse(sessionStorage.getItem('sl_user') || 'null'); }catch(e){ return null; } }
+function storeSession(token, user){ sessionStorage.setItem('sl_token', token); sessionStorage.setItem('sl_user', JSON.stringify(user)); }
+function clearStoredSession(){ sessionStorage.removeItem('sl_token'); sessionStorage.removeItem('sl_user'); }
 
-// ── INIT ──
-window.onload=function(){
-  // API key is set by the user via Settings, or server-side via Netlify env var
-  const s=getSettings();
-  checkApiBanner();
-  const sess=getSession();
-  if(sess){currentUser=sess;enterApp();}
-  else{showScreen('marketing');}
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+window.onload = function(){
+  // Build quick-load buttons
+  const qg = document.getElementById('quickGroup');
+  if(qg){
+    SAMPLES.forEach((s,i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quick-btn';
+      btn.textContent = s[0];
+      btn.onclick = () => loadSample(i);
+      qg.appendChild(btn);
+    });
+  }
+
+  // Restore session from sessionStorage
+  const token = getStoredToken();
+  const user  = getStoredUser();
+  if(token && user){
+    authToken   = token;
+    currentUser = user;
+    enterApp();
+  } else {
+    showScreen('marketing');
+  }
 };
 
-// ── SCREENS ──
+// ══════════════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ══════════════════════════════════════════════════════
 function showScreen(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById('screen-'+name);
-  if(el)el.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-'+name);
+  if(el) el.classList.add('active');
   updateNav(name);
   window.scrollTo(0,0);
 }
 
 function updateNav(screen){
-  const nr=document.getElementById('navRight');
-  if(screen==='app'||screen==='upgrade'){
-    nr.innerHTML=`<span class="nav-user">👤 ${currentUser?currentUser.name:''}</span><button class="nav-btn nav-btn-ghost" onclick="openSettings()" title="Settings">⚙</button><button class="nav-btn nav-btn-ghost" onclick="doLogout()">Log Out</button>`;
-  } else if(screen==='marketing'){
+  const nr = document.getElementById('navRight');
+  if(screen === 'app' || screen === 'upgrade'){
+    nr.innerHTML = `<span class="nav-user">👤 ${currentUser ? currentUser.name : ''}</span><button class="nav-btn nav-btn-ghost" onclick="doLogout()">Log Out</button>`;
+  } else if(screen === 'marketing'){
     if(currentUser){
-      nr.innerHTML=`<span class="nav-user">👤 ${currentUser.name}</span><button class="nav-btn nav-btn-orange" onclick="showScreen('app')">OPEN APP →</button>`;
+      nr.innerHTML = `<span class="nav-user">👤 ${currentUser.name}</span><button class="nav-btn nav-btn-orange" onclick="showScreen('app')">OPEN APP →</button>`;
     } else {
-      nr.innerHTML=`<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
+      nr.innerHTML = `<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
     }
   } else {
-    nr.innerHTML=`<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
+    nr.innerHTML = `<button class="nav-btn nav-btn-ghost" onclick="showScreen('login')">Log In</button><button class="nav-btn nav-btn-orange" onclick="showScreen('signup')">Start Free Trial</button>`;
   }
 }
 
-function goHome(){if(currentUser)showScreen('app');else showScreen('marketing');}
+function goHome(){ if(currentUser) showScreen('app'); else showScreen('marketing'); }
 
-// ── AUTH ──
-function doSignup(){
-  const name=document.getElementById('signup-name').value.trim();
-  const email=document.getElementById('signup-email').value.trim().toLowerCase();
-  const pass=document.getElementById('signup-pass').value;
-  const err=document.getElementById('signup-err');
+// ══════════════════════════════════════════════════════
+// AUTH — calls Netlify function, no passwords in browser
+// ══════════════════════════════════════════════════════
+async function doSignup(){
+  const name  = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('signup-pass').value;
+  const err   = document.getElementById('signup-err');
+  const info  = document.getElementById('signup-info');
+  const btn   = document.getElementById('signup-btn');
   err.classList.remove('show');
-  if(!name||!email||!pass){err.textContent='Please fill in all fields.';err.classList.add('show');return;}
-  if(pass.length<6){err.textContent='Password must be at least 6 characters.';err.classList.add('show');return;}
-  if(!email.includes('@')){err.textContent='Please enter a valid email.';err.classList.add('show');return;}
-  const users=getUsers();
-  if(users[email]){err.textContent='An account with this email already exists.';err.classList.add('show');return;}
-  users[email]={name,email,pass,reportsUsed:0,isPro:false,history:[],createdAt:new Date().toISOString()};
-  saveUsers(users);
-  currentUser=users[email];
-  saveSession(currentUser);
-  enterApp();
+  info.classList.remove('show');
+  if(!name || !email || !pass){ err.textContent = 'Please fill in all fields.'; err.classList.add('show'); return; }
+  if(pass.length < 6){ err.textContent = 'Password must be at least 6 characters.'; err.classList.add('show'); return; }
+  if(!email.includes('@')){ err.textContent = 'Please enter a valid email.'; err.classList.add('show'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'CREATING ACCOUNT…';
+
+  try {
+    const res  = await fetch(AUTH_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'signup', name, email, password: pass })
+    });
+    const data = await res.json();
+
+    if(!data.success){
+      err.textContent = data.error || 'Signup failed. Please try again.';
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'CREATE FREE ACCOUNT →';
+      return;
+    }
+
+    // Email confirmation required — tell the user
+    if(data.requiresConfirmation){
+      info.textContent = data.message || 'Account created. Please check your email to confirm before logging in.';
+      info.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'CREATE FREE ACCOUNT →';
+      return;
+    }
+
+    authToken   = data.token;
+    currentUser = data.user;
+    storeSession(authToken, currentUser);
+    enterApp();
+
+  } catch(e){
+    err.textContent = 'Connection error. Please check your internet and try again.';
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'CREATE FREE ACCOUNT →';
+  }
 }
 
-function doLogin(){
-  const email=document.getElementById('login-email').value.trim().toLowerCase();
-  const pass=document.getElementById('login-pass').value;
-  const err=document.getElementById('login-err');
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-err');
+  const btn   = document.getElementById('login-btn');
   err.classList.remove('show');
-  const users=getUsers();
-  if(!users[email]||users[email].pass!==pass){err.textContent='Invalid email or password.';err.classList.add('show');return;}
-  currentUser=users[email];
-  saveSession(currentUser);
-  enterApp();
+
+  if(!email || !pass){ err.textContent = 'Please enter your email and password.'; err.classList.add('show'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'LOGGING IN…';
+
+  try {
+    const res  = await fetch(AUTH_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', email, password: pass })
+    });
+    const data = await res.json();
+
+    if(!data.success){
+      err.textContent = data.error || 'Login failed. Please try again.';
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'LOG IN →';
+      return;
+    }
+
+    authToken   = data.token;
+    currentUser = data.user;
+    storeSession(authToken, currentUser);
+    enterApp();
+
+  } catch(e){
+    err.textContent = 'Connection error. Please check your internet and try again.';
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'LOG IN →';
+  }
 }
 
-function doLogout(){currentUser=null;clearSession();showScreen('marketing');}
+function doLogout(){
+  currentUser = null;
+  authToken   = null;
+  historyCache = null;
+  clearStoredSession();
+  showScreen('marketing');
+}
 
 function enterApp(){
+  historyCache = null;  // clear any stale cache on fresh enter
   showScreen('app');
   updateUsageBar();
   showGenerator();
-  loadCtx();
-  loadDraft();
 }
 
-// ── USAGE ──
+// ══════════════════════════════════════════════════════
+// USAGE TRACKING (server-authoritative)
+// ══════════════════════════════════════════════════════
 function updateUsageBar(){
-  if(!currentUser)return;
-  const used=currentUser.reportsUsed||0;
-  const isPro=currentUser.isPro;
-  document.getElementById('usageCount').textContent=isPro?'∞ Pro':`${used} / ${FREE_LIMIT}`;
-  document.getElementById('usageFill').style.width=isPro?'100%':`${Math.min(100,(used/FREE_LIMIT)*100)}%`;
-  document.getElementById('usageFill').style.background=isPro?'#2ecc71':(used>=FREE_LIMIT?'#e74c3c':'#F28C28');
-  document.getElementById('upgradeBtn').classList.toggle('hidden',isPro);
+  if(!currentUser) return;
+  const used  = currentUser.reportsUsed || 0;
+  const isPro = currentUser.plan === 'pro' || currentUser.plan === 'enterprise';
+  document.getElementById('usageCount').textContent = isPro ? '∞ Pro' : `${used} / ${FREE_LIMIT}`;
+  document.getElementById('usageFill').style.width      = isPro ? '100%' : `${Math.min(100,(used/FREE_LIMIT)*100)}%`;
+  document.getElementById('usageFill').style.background = isPro ? '#2ecc71' : (used >= FREE_LIMIT ? '#e74c3c' : '#F28C28');
+  document.getElementById('upgradeBtn').classList.toggle('hidden', isPro);
 }
 
-function canGenerate(){if(!currentUser)return false;if(currentUser.isPro)return true;return(currentUser.reportsUsed||0)<FREE_LIMIT;}
-
-function incrementUsage(){
-  const users=getUsers();
-  users[currentUser.email].reportsUsed=(users[currentUser.email].reportsUsed||0)+1;
-  currentUser.reportsUsed=users[currentUser.email].reportsUsed;
-  saveUsers(users);saveSession(currentUser);updateUsageBar();
+function canGenerate(){
+  if(!currentUser) return false;
+  if(currentUser.plan === 'pro' || currentUser.plan === 'enterprise') return true;
+  return (currentUser.reportsUsed || 0) < FREE_LIMIT;
 }
 
-function saveToHistory(notes,report,meta){
-  const users=getUsers();
-  if(!users[currentUser.email].history)users[currentUser.email].history=[];
-  users[currentUser.email].history.unshift({
-    type:MODES[currentMode].title,
-    notes:notes.substring(0,120),
-    report,
-    meta:meta||{},
-    date:new Date().toLocaleString('en-GB')
-  });
-  if(users[currentUser.email].history.length>50)users[currentUser.email].history.pop();
-  saveUsers(users);currentUser.history=users[currentUser.email].history;saveSession(currentUser);
+// ══════════════════════════════════════════════════════
+// GENERATOR UI
+// ══════════════════════════════════════════════════════
+function showGenerator(){
+  document.getElementById('generatorPanel').style.display = 'flex';
+  document.getElementById('historyPanel').style.display   = 'none';
 }
 
-// ── GENERATOR ──
-function showGenerator(){document.getElementById('generatorPanel').style.display='flex';document.getElementById('historyPanel').style.display='none';}
-function showHistory(){document.getElementById('generatorPanel').style.display='none';document.getElementById('historyPanel').style.display='flex';renderHistory();}
+function showHistory(){
+  document.getElementById('generatorPanel').style.display = 'none';
+  document.getElementById('historyPanel').style.display   = 'flex';
+  renderHistory();
+}
 
-function setMode(btn,idx){
-  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');currentMode=idx;
-  document.getElementById('modeTitle').textContent=MODES[idx].title;
-  document.getElementById('modeDesc').textContent=MODES[idx].desc;
+function setMode(btn, idx){
+  document.querySelectorAll('.pb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMode = idx;
+  document.getElementById('modeTitle').textContent = MODES[idx].title;
+  document.getElementById('modeDesc').textContent  = MODES[idx].desc;
   document.getElementById('outWrap').classList.remove('vis');
   showGenerator();
 }
 
 function loadSample(idx){
-  document.getElementById('notesInput').value=SAMPLES[idx];
-  onNotesInput();
+  document.getElementById('notesInput').value = SAMPLES[idx][1];
+  updateCharCount();
   document.getElementById('outWrap').classList.remove('vis');
   showGenerator();
 }
 
-function renderOutput(text,meta){
-  lastReportText=text;
-  lastReportMeta=meta||{};
-  const box=document.getElementById('outBox');
-  let html='';
-  // Meta header
-  const parts=[];
-  if(meta){
-    if(meta.tech)parts.push('👤 '+meta.tech);
-    if(meta.site)parts.push('📍 '+meta.site);
-    if(meta.shift)parts.push('🕐 '+meta.shift);
-    if(meta.company)parts.push('🏢 '+meta.company);
-    parts.push('Generated: '+new Date().toLocaleString('en-GB'));
-  }
-  if(parts.length)html+=`<div class="out-meta">${parts.join('&nbsp; · &nbsp;')}</div>`;
-  for(const line of text.split('\n')){
-    const t=line.trim();
-    if(!t){html+='<div style="height:5px"></div>';continue;}
-    const isH=HEADERS.some(h=>t===h||t===h+':');
-    if(isH)html+=`<div class="os">${t.replace(':','')}</div>`;
-    else if(/^[•\-\*]/.test(t))html+=`<div class="oli">${t.replace(/^[•\-\*]\s*/,'')}</div>`;
-    else html+=`<div class="op">${t}</div>`;
-  }
-  box.innerHTML=html;
+function updateCharCount(){
+  const n = document.getElementById('notesInput').value.length;
+  document.getElementById('charCount').textContent = `${n} character${n===1?'':'s'}`;
 }
 
-// ── GENERATE ──
-const LOADING_MSGS=['Analysing operational data…','Parsing fault context…','Structuring report sections…','Applying industrial terminology…','Almost ready…'];
+function buildContextHeader(){
+  const site     = document.getElementById('ctxSite').value.trim();
+  const shift    = document.getElementById('ctxShift').value.trim();
+  const tech     = document.getElementById('ctxTech').value.trim();
+  const industry = document.getElementById('ctxIndustry').value.trim();
+  const asset    = document.getElementById('ctxAsset').value.trim();
+  const assetId  = document.getElementById('ctxAssetId').value.trim();
+  const parts = [];
+  if(site)     parts.push(`Site: ${site}`);
+  if(shift)    parts.push(`Shift: ${shift}`);
+  if(tech)     parts.push(`Technician: ${tech}`);
+  if(industry) parts.push(`Industry: ${industry}`);
+  if(asset)    parts.push(`Asset/Equipment: ${asset}`);
+  if(assetId)  parts.push(`Asset ID: ${assetId}`);
+  return parts.length ? parts.join(' | ') + '\n\n' : '';
+}
 
-async function generate(){
-  // API key is handled server-side via Netlify Function proxy
-  const apiKey=getApiKey(); // kept for local dev fallback only
-  if(!canGenerate()){document.getElementById('limitModal').classList.add('show');return;}
-  const notes=document.getElementById('notesInput').value.trim();
-  if(!notes){document.getElementById('notesInput').focus();return;}
-
-  const meta={
-    tech:document.getElementById('ctxTech').value.trim(),
-    site:document.getElementById('ctxSite').value.trim(),
-    shift:document.getElementById('ctxShift').value.trim(),
-    company:getSettings().company||''
-  };
-
-  // Build enriched prompt
-  const ctxLines=[];
-  if(meta.company)ctxLines.push('Organisation: '+meta.company);
-  if(meta.site)ctxLines.push('Site/Area: '+meta.site);
-  if(meta.tech)ctxLines.push('Reported by: '+meta.tech);
-  if(meta.shift)ctxLines.push('Shift: '+meta.shift);
-  const ctxBlock=ctxLines.length?ctxLines.join('\n')+'\n\n':'';
-
-  const btn=document.getElementById('genBtn');
-  const wrap=document.getElementById('outWrap');
-  const box=document.getElementById('outBox');
-  btn.disabled=true;
-  wrap.classList.add('vis');
-  let msgIdx=0;
-  box.innerHTML=`<div style="color:#2d5a7a;font-size:13px;"><span class="spin" style="margin-right:8px"></span>${LOADING_MSGS[0]}</div>`;
-  const loadInterval=setInterval(()=>{
-    msgIdx=(msgIdx+1)%LOADING_MSGS.length;
-    const inner=box.querySelector('div');
-    if(inner)inner.innerHTML=`<span class="spin" style="margin-right:8px"></span>${LOADING_MSGS[msgIdx]}`;
-  },1800);
-  btn.innerHTML='<span class="spin"></span> PROCESSING…';
-
-  try{
-    const res=await fetch('/.netlify/functions/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-opus-4-20250514',
-        max_tokens:1500,
-        system:MODES[currentMode].sys,
-        messages:[{role:'user',content:`${ctxBlock}Raw operational notes:\n\n${notes}`}]
-      })
-    });
-    clearInterval(loadInterval);
-    if(!res.ok){
-      const errData=await res.json().catch(()=>({}));
-      let msg='Generation failed.';
-      if(res.status===401)msg='Server API key issue. Please contact support.';
-      else if(res.status===429)msg='Rate limit reached. Wait a moment and try again.';
-      else if(res.status===500)msg='Anthropic server error. Try again in a few seconds.';
-      else if(errData.error?.message)msg='Error: '+errData.error.message;
-      box.innerHTML=`<div style="color:#e74c3c;font-size:13px;">⚠ ${msg}</div>`;
-      btn.disabled=false;btn.innerHTML='⚙ GENERATE REPORT';
-      return;
-    }
-    const data=await res.json();
-    const text=data.content?.[0]?.text||'No output received.';
-    renderOutput(text,meta);
-    incrementUsage();
-    saveToHistory(notes,text,meta);
-  }catch(e){
-    clearInterval(loadInterval);
-    box.innerHTML='<div style="color:#e74c3c;font-size:13px;">⚠ Network error. Check your internet connection and try again.</div>';
+function renderOutput(text){
+  lastReportText = text;
+  const box = document.getElementById('outBox');
+  let html = '';
+  for(const line of text.split('\n')){
+    const t = line.trim();
+    if(!t){ html += '<div style="height:5px"></div>'; continue; }
+    const isH = HEADERS.some(h => t === h || t === h + ':');
+    if(isH)      html += `<div class="os">${t.replace(':','')}</div>`;
+    else if(/^[•\-\*]/.test(t)) html += `<div class="oli">${t.replace(/^[•\-\*]\s*/,'')}</div>`;
+    else         html += `<div class="op">${t}</div>`;
   }
-  btn.disabled=false;btn.innerHTML='⚙ GENERATE REPORT';
+  box.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════
+// PIPELINE HELPERS
+// ══════════════════════════════════════════════════════
+
+// Centralised authenticated fetch. Throws named errors for 401/403.
+async function apiFetch(endpoint, body){
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+    body: JSON.stringify(body)
+  });
+  if(res.status === 401){
+    doLogout();
+    document.getElementById('login-err').textContent = 'Session expired. Please log in again.';
+    document.getElementById('login-err').classList.add('show');
+    showScreen('login');
+    throw new Error('SESSION_EXPIRED');
+  }
+  if(res.status === 403) throw new Error('LIMIT_REACHED');
+  if(!res.ok){
+    let msg = `Server error (HTTP ${res.status})`;
+    try{ const d = await res.json(); if(d.error) msg += ': ' + d.error; }catch(e){}
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+function setPipelineStep(box, btn, msg){
+  box.innerHTML = `<div class="pipeline-step"><span class="spin"></span> ${msg}</div>`;
+  btn.innerHTML = `<span class="spin"></span> ${msg.toUpperCase()}`;
+}
+
+// ══════════════════════════════════════════════════════
+// MAIN GENERATE FUNCTION — v3 PIPELINE
+// classify → generate → validate → save-report
+// ══════════════════════════════════════════════════════
+async function generate(){
+  if(!canGenerate()){ document.getElementById('limitModal').classList.add('show'); return; }
+  const notes = document.getElementById('notesInput').value.trim();
+  if(!notes){ document.getElementById('notesInput').focus(); return; }
+
+  const btn   = document.getElementById('genBtn');
+  const wrap  = document.getElementById('outWrap');
+  const box   = document.getElementById('outBox');
+  const miss  = document.getElementById('missingInfo');
+  const vwarn = document.getElementById('validationWarn');
+
+  btn.disabled = true;
+  wrap.classList.add('vis');
+  miss.classList.remove('show');
+  vwarn.innerHTML = '';
+  vwarn.classList.remove('show');
+
+  const ctxSite     = document.getElementById('ctxSite').value.trim();
+  const ctxShift    = document.getElementById('ctxShift').value.trim();
+  const ctxTech     = document.getElementById('ctxTech').value.trim();
+  const ctxIndustry = document.getElementById('ctxIndustry').value.trim();
+  const ctxAsset    = document.getElementById('ctxAsset').value.trim();
+  const ctxAssetId  = document.getElementById('ctxAssetId').value.trim();
+  const contextHeader = buildContextHeader();
+  const userContent   = `${contextHeader}Raw operational notes:\n\n${notes}`;
+
+  try {
+    // ── Step 1: Classify notes ──────────────────────
+    setPipelineStep(box, btn, 'Classifying…');
+    const classified = await apiFetch(CLASSIFY_ENDPOINT, {
+      notes,
+      hint: { industry: ctxIndustry, report_type: MODES[currentMode].title }
+    });
+    const classification = classified.classification || {};
+
+    if(classification.confidence === 'low'){
+      vwarn.innerHTML = '<strong>⚠ Low classification confidence.</strong> The AI could not determine the industry or report type with certainty. Review the report carefully and consider adding more context.';
+      vwarn.classList.add('show');
+    }
+
+    // ── Step 2: Generate report ─────────────────────
+    setPipelineStep(box, btn, 'Generating report…');
+    const generated = await apiFetch(GENERATE_ENDPOINT, {
+      model:      MODEL,
+      max_tokens: MAX_TOKENS,
+      system:     MODES[currentMode].sys,
+      messages:   [{ role: 'user', content: userContent }],
+      classification
+    });
+    const reportText = generated.report_text;
+    if(!reportText) throw new Error('AI returned an empty response. Please try again.');
+
+    // ── Step 3: Validate report against notes ───────
+    setPipelineStep(box, btn, 'Validating facts…');
+    const validation = await apiFetch(VALIDATE_ENDPOINT, {
+      report_text:    reportText,
+      original_notes: notes
+    });
+
+    // Use cleaned version (unsupported claims substituted with "To be verified")
+    const finalText = validation.cleaned_report_text || reportText;
+
+    if(validation.unsupported_count > 0){
+      const count = validation.unsupported_count;
+      const issueItems = (validation.issues || [])
+        .map(i => `<li style="margin-bottom:4px"><strong>${i.claim}</strong> — ${i.issue}</li>`)
+        .join('');
+      const existingWarn = vwarn.innerHTML;
+      vwarn.innerHTML = (existingWarn ? existingWarn + '<br>' : '')
+        + `<strong>⚠ ${count} unverified claim${count > 1 ? 's' : ''} replaced with "To be verified".</strong>`
+        + (issueItems ? `<ul style="margin:6px 0 0 14px;line-height:1.8">${issueItems}</ul>` : '');
+      vwarn.classList.add('show');
+    }
+
+    // ── Step 4: Save report (usage is counted here) ─
+    setPipelineStep(box, btn, 'Saving report…');
+    const saved = await apiFetch(SAVE_REPORT_ENDPOINT, {
+      report_text:      finalText,
+      raw_notes:        notes,
+      classification,
+      validation_result: {
+        valid:             validation.valid,
+        unsupported_count: validation.unsupported_count || 0,
+        issues:            validation.issues || []
+      },
+      context: {
+        site:       ctxSite     || null,
+        shift:      ctxShift    || null,
+        technician: ctxTech     || null,
+        industry:   ctxIndustry || null,
+        asset:      ctxAsset    || null,
+        assetId:    ctxAssetId  || null
+      },
+      usage: generated.usage || {}
+    });
+
+    // ── Render output ────────────────────────────────
+    renderOutput(finalText);
+
+    // Update usage bar — server is authoritative
+    if(typeof saved.reportsUsed === 'number'){
+      currentUser.reportsUsed = saved.reportsUsed;
+      storeSession(authToken, currentUser);
+      updateUsageBar();
+    }
+
+    // Invalidate history cache so next open reloads from server
+    historyCache = null;
+
+    // Show missing info hint if placeholders are present
+    const uncertaintyPhrases = ['not specified','to be verified','further inspection required','not confirmed','not recorded','cannot calculate'];
+    const hasUncertainty = uncertaintyPhrases.some(p => finalText.toLowerCase().includes(p));
+    if(hasUncertainty){
+      miss.innerHTML = '<strong>ℹ Missing information detected.</strong> The report contains fields marked "Not specified" or "To be verified". Add more detail to your notes and regenerate for a more complete report.';
+      miss.classList.add('show');
+    }
+
+  } catch(e){
+    if(e.message === 'SESSION_EXPIRED') return; // handled inside apiFetch
+    if(e.message === 'LIMIT_REACHED'){ document.getElementById('limitModal').classList.add('show'); return; }
+    box.innerHTML = `<div class="err-box"><strong>Report generation failed.</strong> ${e.message}<br><small style="color:#c0392b;margin-top:4px;display:block;">If this persists, try again or check your internet connection.</small></div>`;
+  }
+
+  btn.disabled  = false;
+  btn.innerHTML = '⚙ GENERATE REPORT';
 }
 
 function clearAll(){
-  document.getElementById('notesInput').value='';
+  document.getElementById('notesInput').value = '';
   document.getElementById('outWrap').classList.remove('vis');
-  lastReportText='';
-  document.getElementById('charCount').textContent='0 characters';
-  localStorage.removeItem('sl_draft');
+  document.getElementById('missingInfo').classList.remove('show');
+  const vw = document.getElementById('validationWarn');
+  vw.innerHTML = ''; vw.classList.remove('show');
+  document.getElementById('charCount').textContent = '0 characters';
+  lastReportText = '';
 }
 
 function copyOut(){
-  const meta=lastReportMeta;
-  const parts=[];
-  if(meta.company)parts.push('Organisation: '+meta.company);
-  if(meta.site)parts.push('Site/Area: '+meta.site);
-  if(meta.tech)parts.push('Reported by: '+meta.tech);
-  if(meta.shift)parts.push('Shift: '+meta.shift);
-  parts.push('Generated: '+new Date().toLocaleString('en-GB'));
-  const header=parts.join(' · ')+'\n'+'─'.repeat(60)+'\n\n';
-  navigator.clipboard.writeText(header+lastReportText).then(()=>{
-    const m=document.getElementById('copiedMsg');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);
-  }).catch(()=>{
-    // Fallback
-    const ta=document.createElement('textarea');
-    ta.value=header+lastReportText;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    const m=document.getElementById('copiedMsg');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);
+  if(!lastReportText) return;
+  navigator.clipboard.writeText(lastReportText).then(() => {
+    const m = document.getElementById('copiedMsg');
+    m.classList.add('show');
+    setTimeout(() => m.classList.remove('show'), 2000);
   });
 }
 
-// ── HISTORY ──
-function renderHistory(){
-  const list=document.getElementById('historyList');
-  const history=currentUser?.history||[];
-  if(!history.length){list.innerHTML='<div class="history-empty">No reports yet. Generate your first report to see it here.</div>';return;}
-  list.innerHTML='<div class="history-list">'+history.map((h,i)=>`
-    <div class="history-card" onclick="loadFromHistory(${i})">
-      <div class="hc-top"><span class="hc-type">${h.type}</span><span class="hc-date">${h.date}</span></div>
-      ${h.meta&&(h.meta.site||h.meta.tech)?`<div style="font-size:10px;color:#2d5a7a;margin-bottom:4px;letter-spacing:.04em;">${[h.meta.tech,h.meta.site].filter(Boolean).join(' · ')}</div>`:''}
-      <div class="hc-preview">${h.notes}…</div>
-    </div>`).join('')+'</div>';
-}
+// ══════════════════════════════════════════════════════
+// HISTORY — loaded from Supabase via reports.js
+// ══════════════════════════════════════════════════════
+async function renderHistory(){
+  const list = document.getElementById('historyList');
+  const sub  = document.getElementById('historySubtitle');
 
-function loadFromHistory(idx){
-  const h=currentUser.history[idx];if(!h)return;
-  const modeIdx=MODES.findIndex(m=>m.title===h.type);
-  if(modeIdx>=0){
-    currentMode=modeIdx;
-    document.querySelectorAll('.pb').forEach((b,i)=>b.classList.toggle('active',i===modeIdx));
-    document.getElementById('modeTitle').textContent=MODES[modeIdx].title;
-    document.getElementById('modeDesc').textContent=MODES[modeIdx].desc;
+  // Use cache if available
+  if(historyCache !== null){
+    renderHistoryList(historyCache);
+    return;
   }
-  renderOutput(h.report,h.meta||{});
-  document.getElementById('outWrap').classList.add('vis');
-  showGenerator();
+
+  list.innerHTML = '<div class="history-empty"><span class="spin"></span> Loading history…</div>';
+  sub.textContent = 'Your previously generated reports — saved to your account';
+
+  try {
+    const res = await fetch(REPORTS_ENDPOINT + '?limit=50', {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if(res.status === 401){ doLogout(); showScreen('login'); return; }
+
+    if(!res.ok){
+      list.innerHTML = '<div class="history-empty">Could not load report history. Please try again.</div>';
+      return;
+    }
+
+    const data = await res.json();
+    historyCache = data.reports || [];
+    renderHistoryList(historyCache);
+
+  } catch(e){
+    list.innerHTML = '<div class="history-empty">Connection error. Could not load history.</div>';
+  }
 }
 
-// ── PDF ──
+function renderHistoryList(reports){
+  const list = document.getElementById('historyList');
+  if(!reports.length){
+    list.innerHTML = '<div class="history-empty">No reports yet. Generate your first report to see it here.</div>';
+    return;
+  }
+  list.innerHTML = '<div class="history-list">' + reports.map((h,i) => {
+    const dateStr = h.created_at ? new Date(h.created_at).toLocaleString('en-GB') : '';
+    const site    = h.site ? ' · ' + h.site : '';
+    return `<div class="history-card" onclick="loadFromHistory('${h.id}')">
+      <div class="hc-top">
+        <span class="hc-type">${h.report_type || ''}</span>
+        <span class="hc-date">${dateStr}${site}</span>
+      </div>
+      <div class="hc-preview">${h.technician ? h.technician + ' — ' : ''}${h.shift || 'Report'}</div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+async function loadFromHistory(reportId){
+  // Fetch full report text from server
+  const list = document.getElementById('historyList');
+
+  try {
+    const res = await fetch(REPORTS_ENDPOINT + '?id=' + reportId, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if(res.status === 401){ doLogout(); showScreen('login'); return; }
+    if(!res.ok){ return; }
+
+    const data = await res.json();
+    const h    = data.report;
+    if(!h || !h.report_text) return;
+
+    // Switch to the matching mode if possible
+    const modeIdx = MODES.findIndex(m => m.title === h.report_type);
+    if(modeIdx >= 0){
+      currentMode = modeIdx;
+      document.querySelectorAll('.pb').forEach((b,i) => b.classList.toggle('active', i === modeIdx));
+      document.getElementById('modeTitle').textContent = MODES[modeIdx].title;
+      document.getElementById('modeDesc').textContent  = MODES[modeIdx].desc;
+    }
+    if(h.site)  document.getElementById('ctxSite').value  = h.site;
+    if(h.shift) document.getElementById('ctxShift').value = h.shift;
+    if(h.technician) document.getElementById('ctxTech').value = h.technician;
+
+    renderOutput(h.report_text);
+    document.getElementById('outWrap').classList.add('vis');
+    showGenerator();
+
+  } catch(e){
+    // Non-fatal — just stay on history page
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// PDF EXPORT
+// ══════════════════════════════════════════════════════
 function downloadPDF(){
-  if(!lastReportText)return;
-  const{jsPDF}=window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4'});
-  const pageW=doc.internal.pageSize.getWidth();
-  const pageH=doc.internal.pageSize.getHeight();
-  const margin=18;const contentW=pageW-margin*2;
-  const s=getSettings();
-  const meta=lastReportMeta||{};
-  const company=meta.company||s.company||'';
+  if(!lastReportText) return;
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({unit:'mm', format:'a4'});
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  const contentW = pageW - margin*2;
 
   // Background
-  doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
-  // Top accent
-  doc.setFillColor(242,140,40);doc.rect(0,0,pageW,2,'F');
+  doc.setFillColor(10,30,48); doc.rect(0,0,pageW,pageH,'F');
+  // Orange top bar
+  doc.setFillColor(242,140,40); doc.rect(0,0,pageW,2,'F');
   // Header band
-  doc.setFillColor(6,21,37);doc.rect(0,2,pageW,26,'F');
+  doc.setFillColor(6,21,37); doc.rect(0,2,pageW,22,'F');
 
   // Logo
-  doc.setFont('helvetica','bold');doc.setFontSize(17);
-  doc.setTextColor(255,255,255);doc.text('SHIFTLOGIC',margin,13);
-  doc.setTextColor(242,140,40);doc.text('AI',margin+47,13);
+  doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(255,255,255);
+  doc.text('SHIFTLOGIC', margin, 14);
+  doc.setTextColor(242,140,40); doc.text('AI', margin+43, 14);
 
   // Report type
-  doc.setFont('helvetica','normal');doc.setFontSize(8);
-  doc.setTextColor(74,122,155);doc.text(MODES[currentMode].title,margin,19);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(74,122,155);
+  doc.text(MODES[currentMode].title, margin, 20);
 
-  // Company name under logo
-  if(company){
-    doc.setFontSize(7.5);doc.setTextColor(200,220,230);
-    doc.text(company,margin,24);
-  }
+  // Date + user
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  doc.text(dateStr, pageW-margin, 14, {align:'right'});
 
-  // Right side meta
-  const now=new Date();
-  const dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  doc.setFontSize(8);doc.setTextColor(74,122,155);
-  doc.text(dateStr,pageW-margin,13,{align:'right'});
-  if(meta.shift){doc.setFontSize(7.5);doc.text(meta.shift,pageW-margin,19,{align:'right'});}
-  if(meta.tech){doc.setFontSize(7);doc.setTextColor(45,90,122);doc.text('By: '+meta.tech,pageW-margin,24,{align:'right'});}
-  if(meta.site){doc.setFontSize(7);doc.text(meta.site,pageW-margin,28,{align:'right'});}
+  const siteVal = document.getElementById('ctxSite').value.trim();
+  const metaStr = [currentUser ? currentUser.name : '', siteVal].filter(Boolean).join(' — ');
+  if(metaStr) doc.text(metaStr, pageW-margin, 20, {align:'right'});
 
   // Divider
-  doc.setDrawColor(242,140,40);doc.setLineWidth(0.5);doc.line(margin,30,pageW-margin,30);
+  doc.setDrawColor(242,140,40); doc.setLineWidth(0.5); doc.line(margin, 26, pageW-margin, 26);
 
-  let y=38;
+  let y = 34;
   for(const line of lastReportText.split('\n')){
-    const t=line.trim();if(!t){y+=3;continue;}
-    if(y>pageH-18){
-      doc.addPage();
-      doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
-      // Continuation header
-      doc.setFillColor(6,21,37);doc.rect(0,0,pageW,10,'F');
-      doc.setFillColor(242,140,40);doc.rect(0,0,pageW,1.5,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);doc.text('SHIFTLOGIC',margin,7);
-      doc.setTextColor(242,140,40);doc.text('AI',margin+22,7);
-      doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(45,90,122);
-      doc.text(MODES[currentMode].title,margin+28,7);
-      y=16;
-    }
-    const isH=HEADERS.some(h=>t===h||t===h+':');
-    if(isH){
-      y+=5;
-      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(242,140,40);
-      doc.text(t.replace(':',''),margin,y);
-      y+=2;
-      doc.setDrawColor(26,58,85);doc.setLineWidth(0.3);doc.line(margin,y,pageW-margin,y);
-      y+=5;
-    } else {
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(216,236,247);
-      const prefix=/^[•\-\*]/.test(t)?'  ▸  ':'';
-      const clean=prefix+t.replace(/^[•\-\*]\s*/,'');
-      const wrapped=doc.splitTextToSize(clean,contentW-(prefix?4:0));
-      for(const wl of wrapped){
-        if(y>pageH-18){
-          doc.addPage();doc.setFillColor(10,30,48);doc.rect(0,0,pageW,pageH,'F');
-          doc.setFillColor(6,21,37);doc.rect(0,0,pageW,10,'F');
-          doc.setFillColor(242,140,40);doc.rect(0,0,pageW,1.5,'F');
-          y=16;
-        }
-        doc.text(wl,margin+(prefix?4:0),y);y+=5.5;
-      }
-    }
-  }
-
-  // Footer
-  doc.setFillColor(6,21,37);doc.rect(0,pageH-11,pageW,11,'F');
-  doc.setDrawColor(26,58,85);doc.setLineWidth(0.3);doc.line(0,pageH-11,pageW,pageH-11);
-  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(45,90,122);
-  doc.text('SHIFTLOGIC AI — AI-Powered Industrial Maintenance & Incident Reporting',margin,pageH-5);
-  doc.text('shiftlogic.ai',pageW-margin,pageH-5,{align:'right'});
-
-  doc.save(`ShiftLogic_${MODES[currentMode].title.replace(/\s+/g,'_')}_${now.toISOString().slice(0,10)}.pdf`);
-}
-
-// ── KEYBOARD SHORTCUTS ──
-document.addEventListener('keydown',e=>{
-  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();generate();}
-  if(e.key==='Escape'){
-    document.getElementById('settingsModal').classList.remove('show');
-    document.getElementById('limitModal').classList.remove('show');
-  }
-});
-</script>
-</body>
-</html>
-                                                                                                                                                                          
+    const t = line.trim();
+    if(!t){ y+=3; continue; }
+    if(y > pageH-20){ doc.addPage(); doc.setFillColor(10,
