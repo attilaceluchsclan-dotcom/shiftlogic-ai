@@ -56,14 +56,14 @@ exports.handler = async function(event) {
   if (!body.model || !Array.isArray(body.messages)) {
     return errRes(400, 'Request body must include model and messages array.');
   }
-  if (!body.messages.length || !body.messages[0]?.content) {
+  if (!body.messages.length || !body.messages[0] || !body.messages[0].content) {
     return errRes(400, 'messages array must contain at least one message with content.');
   }
 
   // Enforce token ceiling
   body.max_tokens = Math.min(body.max_tokens || 1500, MAX_TOKENS_CAP);
 
-  // ── Inject classification context into the system prompt ──
+  // ── Inject classification context into the user message ──
   const classification = body.classification || null;
   delete body.classification;
 
@@ -96,17 +96,19 @@ exports.handler = async function(event) {
     console.error('Anthropic API error:', anthropicRes.status, anthropicData);
     return errRes(
       anthropicRes.status,
-      anthropicData?.error?.message || `AI service error (${anthropicRes.status})`
+      anthropicData && anthropicData.error && anthropicData.error.message
+        ? anthropicData.error.message
+        : 'AI service error (' + anthropicRes.status + ')'
     );
   }
 
-  const reportText = anthropicData.content?.[0]?.text;
+  const reportText = anthropicData.content && anthropicData.content[0] && anthropicData.content[0].text;
   if (!reportText) return errRes(500, 'AI returned an empty response. Please try again.');
 
   // ── Return generated report to client — no DB save, no usage count ──
   return {
     statusCode: 200,
-    headers: { ...cors(), 'Content-Type': 'application/json' },
+    headers: Object.assign(cors(), { 'Content-Type': 'application/json' }),
     body: JSON.stringify({
       success: true,
       report_text: reportText,
@@ -120,22 +122,20 @@ exports.handler = async function(event) {
 // ─────────────────────────────────────────────────────────
 
 function injectClassificationContext(messages, classification) {
-  const {
-    industry,
-    asset_type,
-    report_type,
-    fault_category,
-    root_cause_status,
-    safety_relevant
-  } = classification;
+  const industry          = classification.industry || null;
+  const asset_type        = classification.asset_type || null;
+  const report_type       = classification.report_type || null;
+  const fault_category    = classification.fault_category || null;
+  const root_cause_status = classification.root_cause_status || null;
+  const safety_relevant   = classification.safety_relevant || false;
 
   const lines = ['CLASSIFICATION CONTEXT (pre-determined by classification step):'];
-  if (industry)          lines.push(`  Industry / Sector: ${industry}`);
-  if (asset_type)        lines.push(`  Asset Type: ${asset_type}`);
-  if (report_type)       lines.push(`  Report Type: ${report_type}`);
-  if (fault_category)    lines.push(`  Fault Category: ${fault_category}`);
-  if (root_cause_status) lines.push(`  Root Cause Status: ${root_cause_status.toUpperCase()}`);
-  if (safety_relevant)   lines.push(`  Safety / Compliance Relevant: YES`);
+  if (industry)          lines.push('  Industry / Sector: ' + industry);
+  if (asset_type)        lines.push('  Asset Type: ' + asset_type);
+  if (report_type)       lines.push('  Report Type: ' + report_type);
+  if (fault_category)    lines.push('  Fault Category: ' + fault_category);
+  if (root_cause_status) lines.push('  Root Cause Status: ' + root_cause_status.toUpperCase());
+  if (safety_relevant)   lines.push('  Safety / Compliance Relevant: YES');
 
   const contextBlock = lines.join('\n') + '\n\n';
 
@@ -143,13 +143,13 @@ function injectClassificationContext(messages, classification) {
   const needsCompliance = COMPLIANCE_INDUSTRIES.has(industryLower) || safety_relevant;
   const supplement = needsCompliance ? COMPLIANCE_SUPPLEMENT + '\n' : '';
 
-  const updated = [...messages];
-  const firstMsg = { ...updated[0] };
+  const updated = messages.slice();
+  const firstMsg = Object.assign({}, updated[0]);
 
   if (typeof firstMsg.content === 'string') {
     firstMsg.content = contextBlock + supplement + firstMsg.content;
   } else if (Array.isArray(firstMsg.content)) {
-    const textBlock = firstMsg.content.find(b => b.type === 'text');
+    const textBlock = firstMsg.content.find(function(b) { return b.type === 'text'; });
     if (textBlock) {
       textBlock.text = contextBlock + supplement + textBlock.text;
     }
@@ -164,12 +164,12 @@ function injectClassificationContext(messages, classification) {
 // ─────────────────────────────────────────────────────────
 
 async function verifyUser(token, url, anonKey) {
-  const res = await fetch(`${url}/auth/v1/user`, {
-    headers: { 'apikey': anonKey, 'Authorization': `Bearer ${token}` }
+  const res = await fetch(url + '/auth/v1/user', {
+    headers: { 'apikey': anonKey, 'Authorization': 'Bearer ' + token }
   });
   if (!res.ok) return null;
   const user = await res.json();
-  return user?.id ? { id: user.id, email: user.email } : null;
+  return user && user.id ? { id: user.id, email: user.email } : null;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -184,7 +184,7 @@ function extractToken(headers) {
 function errRes(status, message) {
   return {
     statusCode: status,
-    headers: { ...cors(), 'Content-Type': 'application/json' },
+    headers: Object.assign(cors(), { 'Content-Type': 'application/json' }),
     body: JSON.stringify({ success: false, error: message })
   };
 }
