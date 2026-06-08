@@ -216,6 +216,8 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .op{margin-bottom:5px;}
 .oli{padding-left:13px;text-indent:-9px;margin-bottom:3px;}
 .oli::before{content:"▸ ";color:#F28C28;font-size:10px;}
+.ctx-more-btn{background:transparent;border:none;font-size:11px;color:#2d5a7a;cursor:pointer;padding:5px 0 0;text-align:left;transition:color .12s;font-family:'Barlow',sans-serif;letter-spacing:.02em;}
+.ctx-more-btn:hover{color:#F28C28;}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
 .err-box{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:6px;padding:12px 14px;font-size:12.5px;color:#e74c3c;line-height:1.6;}
@@ -596,17 +598,20 @@ h2.sh em{font-style:italic;color:#F28C28;}
         <div class="mode-desc" id="modeDesc">Convert raw technician notes into a professional structured incident report</div>
       </div>
       <div>
-        <div class="lbl">Context (optional — improves report accuracy)</div>
+        <div class="lbl">Context <span style="font-weight:400;letter-spacing:0;text-transform:none;color:#2d5a7a">(optional — improves accuracy)</span></div>
         <div class="context-row">
           <div class="ctx-field"><div class="ctx-label">Site / Facility</div><input type="text" id="ctxSite" placeholder="e.g. FC Birmingham, Site A"></div>
           <div class="ctx-field"><div class="ctx-label">Shift</div><input type="text" id="ctxShift" placeholder="e.g. Night Shift, 22:00–06:00"></div>
-          <div class="ctx-field"><div class="ctx-label">Technician / Engineer</div><input type="text" id="ctxTech" placeholder="e.g. J. Smith (optional)"></div>
+          <div class="ctx-field"><div class="ctx-label">Technician</div><input type="text" id="ctxTech" placeholder="e.g. J. Smith"></div>
         </div>
-        <div class="context-row" style="margin-top:6px">
-          <div class="ctx-field"><div class="ctx-label">Industry / Sector</div><input type="text" id="ctxIndustry" placeholder="e.g. Manufacturing, Fleet, HVAC"></div>
-          <div class="ctx-field"><div class="ctx-label">Asset / Equipment</div><input type="text" id="ctxAsset" placeholder="e.g. CNC-4, AHU-2, Van 23"></div>
-          <div class="ctx-field"><div class="ctx-label">Asset ID / Tag</div><input type="text" id="ctxAssetId" placeholder="e.g. EQ-0421 (optional)"></div>
+        <div id="extraCtx" style="display:none">
+          <div class="context-row" style="margin-top:6px">
+            <div class="ctx-field"><div class="ctx-label">Industry / Sector</div><input type="text" id="ctxIndustry" placeholder="e.g. Manufacturing, HVAC"></div>
+            <div class="ctx-field"><div class="ctx-label">Asset / Equipment</div><input type="text" id="ctxAsset" placeholder="e.g. CNC-4, AHU-2, Van 23"></div>
+            <div class="ctx-field"><div class="ctx-label">Asset ID / Tag</div><input type="text" id="ctxAssetId" placeholder="e.g. EQ-0421"></div>
+          </div>
         </div>
+        <button class="ctx-more-btn" id="ctxMoreBtn" onclick="toggleExtraCtx()">⊕ Add industry / asset context</button>
       </div>
       <div>
         <div class="lbl">Quick Load — Real Examples</div>
@@ -1457,6 +1462,14 @@ function showHistory(){
   renderHistory();
 }
 
+function toggleExtraCtx(){
+  const el  = document.getElementById('extraCtx');
+  const btn = document.getElementById('ctxMoreBtn');
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent  = open ? '⊕ Add industry / asset context' : '⊖ Hide extra context';
+}
+
 function setMode(btn, idx){
   document.querySelectorAll('.pb').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -1503,13 +1516,25 @@ function renderOutput(text){
   let html = '';
   for(const line of text.split('\n')){
     const t = line.trim();
-    if(!t){ html += '<div style="height:5px"></div>'; continue; }
-    const isH = HEADERS.some(h => t === h || t === h + ':');
-    if(isH)      html += `<div class="os">${t.replace(':','')}</div>`;
-    else if(/^[•\-\*]/.test(t)) html += `<div class="oli">${t.replace(/^[•\-\*]\s*/,'')}</div>`;
-    else         html += `<div class="op">${t}</div>`;
+    if(!t){ html += '<div style="height:4px"></div>'; continue; }
+    const stripped = t.replace(/:$/, '');
+    const isKnownHeader = HEADERS.some(h => stripped === h || stripped === h.replace(/:$/,''));
+    const isAllCaps     = /^[A-Z][A-Z\s\/\-\(\)&]{3,}$/.test(stripped);
+    const isMdHeading   = /^#{1,3}\s/.test(t);
+    if(isKnownHeader || isAllCaps || isMdHeading){
+      html += `<div class="os">${stripped.replace(/^#+\s*/,'')}</div>`;
+    } else if(/^[•\-\*]\s/.test(t)){
+      html += `<div class="oli">${inlineFmt(t.replace(/^[•\-\*]\s+/,''))}</div>`;
+    } else {
+      html += `<div class="op">${inlineFmt(t)}</div>`;
+    }
   }
   box.innerHTML = html;
+}
+function inlineFmt(s){
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code style="background:#0a1e30;padding:1px 4px;border-radius:3px;font-size:12px;color:#7fa8c9">$1</code>');
 }
 
 // ══════════════════════════════════════════════════════
