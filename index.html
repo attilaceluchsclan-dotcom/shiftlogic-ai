@@ -218,6 +218,24 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .oli::before{content:"▸ ";color:#F28C28;font-size:10px;}
 .ctx-more-btn{background:transparent;border:none;font-size:11px;color:#2d5a7a;cursor:pointer;padding:5px 0 0;text-align:left;transition:color .12s;font-family:'Barlow',sans-serif;letter-spacing:.02em;}
 .ctx-more-btn:hover{color:#F28C28;}
+
+/* ADMIN */
+.admin-wrap{max-width:980px;margin:0 auto;padding:28px 20px;}
+.admin-h{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:4px;}
+.admin-sub{font-size:12px;color:#2d5a7a;margin-bottom:24px;}
+.stat-grid{display:none;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.astat{background:#061525;border:1px solid #1a3a55;border-radius:8px;padding:18px;}
+.astat-n{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#F28C28;line-height:1;}
+.astat-l{font-size:11px;color:#4a7a9b;margin-top:4px;letter-spacing:.06em;text-transform:uppercase;}
+.admin-section{margin-bottom:28px;}
+.admin-sec-h{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F28C28;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1a3a55;}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;}
+.admin-table th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2d5a7a;border-bottom:1px solid #1a3a55;}
+.admin-table td{padding:8px 10px;color:#c8dde9;border-bottom:1px solid #0d2335;}
+.admin-table tr:last-child td{border-bottom:none;}
+.plan-badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.plan-badge.pro{background:#F28C28;color:#fff;}
+.plan-badge.free{background:#1a3a55;color:#4a7a9b;}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
 .err-box{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:6px;padding:12px 14px;font-size:12.5px;color:#e74c3c;line-height:1.6;}
@@ -341,6 +359,10 @@ h2.sh em{font-style:italic;color:#F28C28;}
   /* UPGRADE */
   .upgrade-wrap{padding:20px 14px;}
   .upgrade-h{font-size:30px;}
+
+  /* ADMIN */
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .admin-wrap{padding:16px 14px;}
 }
 </style>
 </head>
@@ -608,6 +630,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <button class="pb" onclick="setMode(this,13)"><div class="pn">014</div><div class="pt">Readiness Check</div></button>
       <hr class="sidebar-sep">
       <button class="sidebar-link" onclick="showHistory()">📋 Report History</button>
+      <button class="sidebar-link" onclick="showScreen('admin')">⚙ Admin</button>
       <button class="sidebar-link" onclick="showScreen('marketing')">🏠 Homepage</button>
       <button class="sidebar-link" onclick="doLogout()">← Log Out</button>
     </div>
@@ -698,6 +721,58 @@ h2.sh em{font-style:italic;color:#F28C28;}
   </div>
 </div>
 
+<!-- ══ ADMIN SCREEN ══ -->
+<div class="screen" id="screen-admin">
+  <div class="admin-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div class="admin-h">Admin Dashboard</div>
+        <div class="admin-sub">ShiftLogic AI — read-only stats</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="password" id="adminSecret" placeholder="Admin secret" style="padding:8px 12px;font-size:12px;background:#061525;border:1px solid #1a3a55;border-radius:5px;color:#e8f4fb;outline:none;width:160px;" onkeydown="if(event.key==='Enter')loadAdmin()">
+        <button class="nav-btn nav-btn-orange" onclick="loadAdmin()" style="font-size:12px">LOAD DATA</button>
+        <button class="nav-btn nav-btn-ghost" onclick="showScreen('app')" style="font-size:12px">← Back</button>
+      </div>
+    </div>
+    <div id="adminErr" class="auth-err" style="margin-bottom:16px"></div>
+
+    <!-- Stats overview -->
+    <div class="stat-grid" id="adminStats" style="display:none">
+      <div class="astat"><div class="astat-n" id="asTotalUsers">—</div><div class="astat-l">Total Users</div></div>
+      <div class="astat"><div class="astat-n" id="asTotalReports">—</div><div class="astat-l">Total Reports</div></div>
+      <div class="astat"><div class="astat-n" id="asProCount">—</div><div class="astat-l">Pro Users</div></div>
+      <div class="astat"><div class="astat-n" id="asAvgUsage">—</div><div class="astat-l">Avg Reports / User</div></div>
+    </div>
+
+    <!-- Report type breakdown -->
+    <div class="admin-section" id="adminTypeSection" style="display:none">
+      <div class="admin-sec-h">Report Types Used</div>
+      <div id="adminTypes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;"></div>
+    </div>
+
+    <!-- Recent signups -->
+    <div class="admin-section" id="adminSignupsSection" style="display:none">
+      <div class="admin-sec-h">Signups — Last 7 Days</div>
+      <div id="adminDailyBar" style="display:flex;gap:6px;align-items:flex-end;height:60px;margin-bottom:8px;"></div>
+      <div id="adminDailyLabels" style="display:flex;gap:6px;"></div>
+    </div>
+
+    <!-- User table -->
+    <div class="admin-section" id="adminUsersSection" style="display:none">
+      <div class="admin-sec-h">Users <span id="adminUserCount" style="font-weight:400;color:#4a7a9b;font-size:11px;letter-spacing:0;text-transform:none"></span></div>
+      <div style="overflow-x:auto">
+        <table class="admin-table">
+          <thead><tr>
+            <th>Name</th><th>Plan</th><th>Reports Used</th><th>Joined</th>
+          </tr></thead>
+          <tbody id="adminUsersBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- LIMIT MODAL -->
 <div class="modal-overlay" id="limitModal">
   <div class="modal">
@@ -721,6 +796,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
 const AUTH_ENDPOINT        = '/.netlify/functions/auth';
 const STRIPE_ENDPOINT      = '/.netlify/functions/stripe-checkout';
 const SHARE_ENDPOINT       = '/.netlify/functions/share-report';
+const ADMIN_ENDPOINT       = '/.netlify/functions/admin';
 const VIEW_ENDPOINT        = '/.netlify/functions/view-report';
 const CLASSIFY_ENDPOINT    = '/.netlify/functions/classify';
 const GENERATE_ENDPOINT    = '/.netlify/functions/generate';
@@ -1421,6 +1497,75 @@ async function doLogin(){
     err.classList.add('show');
     btn.disabled = false;
     btn.textContent = 'LOG IN →';
+  }
+}
+
+async function loadAdmin(){
+  const secret = document.getElementById('adminSecret').value.trim();
+  const err    = document.getElementById('adminErr');
+  err.classList.remove('show');
+  if(!secret){ err.textContent = 'Enter admin secret.'; err.classList.add('show'); return; }
+
+  // Load stats + users in parallel
+  try {
+    const [statsRes, usersRes] = await Promise.all([
+      fetch(ADMIN_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({action:'stats'})}),
+      fetch(ADMIN_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','x-admin-secret':secret},body:JSON.stringify({action:'users',limit:200})})
+    ]);
+    const stats = await statsRes.json();
+    const users = await usersRes.json();
+
+    if(!stats.success){ err.textContent = stats.error || 'Access denied.'; err.classList.add('show'); return; }
+
+    // ── Render stat boxes ──
+    document.getElementById('asTotalUsers').textContent   = stats.totalUsers;
+    document.getElementById('asTotalReports').textContent = stats.totalReports;
+    document.getElementById('asProCount').textContent     = stats.proCount;
+    document.getElementById('asAvgUsage').textContent     = stats.avgUsage;
+    document.getElementById('adminStats').style.display  = 'grid';
+
+    // ── Report type breakdown ──
+    const tc = stats.typeCounts || {};
+    const typeEl = document.getElementById('adminTypes');
+    typeEl.innerHTML = Object.entries(tc)
+      .sort((a,b)=>b[1]-a[1])
+      .slice(0,14)
+      .map(([k,v])=>`<div style="background:#061525;border:1px solid #1a3a55;border-radius:6px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;color:#c8dde9">${k}</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#F28C28">${v}</span>
+      </div>`)
+      .join('');
+    document.getElementById('adminTypeSection').style.display = 'block';
+
+    // ── Daily signups bar chart ──
+    const daily = stats.dailySignups || {};
+    const days  = Object.entries(daily);
+    const maxV  = Math.max(...days.map(([,v])=>v), 1);
+    const barEl = document.getElementById('adminDailyBar');
+    const lblEl = document.getElementById('adminDailyLabels');
+    barEl.innerHTML = days.map(([d,v])=>`
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+        <span style="font-size:10px;color:#4a7a9b">${v||''}</span>
+        <div style="width:100%;height:${Math.max(4,Math.round((v/maxV)*48))}px;background:#F28C28;border-radius:3px 3px 0 0;opacity:${v?1:.2}"></div>
+      </div>`).join('');
+    lblEl.innerHTML = days.map(([d])=>`<div style="flex:1;text-align:center;font-size:10px;color:#2d5a7a">${d.slice(5)}</div>`).join('');
+    document.getElementById('adminSignupsSection').style.display = 'block';
+
+    // ── User table ──
+    if(users.success && Array.isArray(users.users)){
+      document.getElementById('adminUserCount').textContent = `(${users.count})`;
+      const tbody = document.getElementById('adminUsersBody');
+      tbody.innerHTML = users.users.map(u=>`<tr>
+        <td>${u.name||'—'}</td>
+        <td><span class="plan-badge ${u.plan||'free'}">${u.plan||'free'}</span></td>
+        <td>${u.reports_used||0}</td>
+        <td style="color:#2d5a7a">${u.created_at?(new Date(u.created_at)).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</td>
+      </tr>`).join('');
+      document.getElementById('adminUsersSection').style.display = 'block';
+    }
+  } catch(e){
+    err.textContent = 'Connection error: ' + e.message;
+    err.classList.add('show');
   }
 }
 
