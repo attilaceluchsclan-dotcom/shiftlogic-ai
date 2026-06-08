@@ -257,11 +257,88 @@ h2.sh em{font-style:italic;color:#F28C28;}
 .modal p{font-size:13px;color:#4a7a9b;line-height:1.7;margin-bottom:20px;}
 .modal-btns{display:flex;gap:10px;justify-content:center;}
 
-@media(max-width:700px){
-  .hero-inner{grid-template-columns:1fr;}
-  .app-layout{grid-template-columns:1fr;}
-  .sidebar{display:none;}
+/* ══════════════════════════════════════
+   MOBILE MENU BUTTON (hidden on desktop)
+══════════════════════════════════════ */
+.mobile-menu-btn{display:none;align-items:center;gap:7px;padding:8px 14px;background:#061525;border:1px solid #1a3a55;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;color:#c8dde9;cursor:pointer;margin-bottom:10px;width:fit-content;}
+.mobile-menu-btn:hover{border-color:#F28C28;color:#fff;}
+.mobile-menu-btn .hb{display:flex;flex-direction:column;gap:3px;}
+.mobile-menu-btn .hb span{display:block;width:14px;height:2px;background:currentColor;border-radius:1px;}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:199;}
+.sidebar-overlay.show{display:block;}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:36px;}
+  .pain-grid{grid-template-columns:1fr 1fr;}
+  .steps{grid-template-columns:1fr 1fr;}
+  .industry-grid{grid-template-columns:1fr 1fr;}
+  .pitch-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;max-width:380px;}
+}
+
+@media(max-width:600px){
+  /* NAV */
+  nav{padding:10px 14px;}
+  .tagline{display:none;}
+  .nav-btn{padding:6px 11px;font-size:11px;}
+
+  /* HERO */
+  .hero{padding:44px 20px 36px;}
+  h1.hero-h{font-size:42px;}
+  .hero-sub{font-size:14px;}
+  .demo-card{display:none;}
+  .hero-note{font-size:11px;}
+
+  /* STATS */
+  .stats-bar{padding:16px 20px;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .stat-num{font-size:28px;}
+
+  /* SECTIONS */
+  .msection{padding:32px 16px;}
+  h2.sh{font-size:28px;}
+  .section-sub{font-size:13px;}
+  .problem-quote{font-size:20px;}
+  .pain-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr;}
+  .industry-grid{grid-template-columns:1fr 1fr;}
+  .pitch-sec{padding:36px 16px;}
+  .pitch-h{font-size:30px;}
+  .pitch-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;max-width:100%;}
+  .footer-cta-sec{padding:36px 16px;}
+  .footer-cta-h{font-size:28px;}
+
+  /* APP LAYOUT */
+  .app-layout{grid-template-columns:1fr;position:relative;}
+  .sidebar{
+    position:fixed;top:0;left:-100%;
+    width:240px;height:100vh;
+    z-index:200;
+    transition:left .22s ease;
+    overflow-y:auto;
+    padding-top:14px;
+  }
+  .sidebar.open{left:0;}
+  .mobile-menu-btn{display:flex;}
+  .main{padding:12px 14px;}
   .context-row{grid-template-columns:1fr;}
+  .actions{flex-wrap:wrap;}
+  .out-bar{flex-direction:column;align-items:flex-start;gap:10px;}
+  .out-actions{flex-wrap:wrap;}
+  .mode-title{font-size:18px;}
+
+  /* AUTH */
+  .auth-wrap{padding:20px 14px;}
+  .auth-card{padding:22px 18px;}
+  .auth-title{font-size:22px;}
+
+  /* UPGRADE */
+  .upgrade-wrap{padding:20px 14px;}
+  .upgrade-h{font-size:30px;}
 }
 </style>
 </head>
@@ -484,6 +561,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
 
 <!-- ══ APP SCREEN ══ -->
 <div class="screen" id="screen-app">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div class="app-layout">
     <div class="sidebar">
       <div class="usage-bar-wrap" id="usageBarWrap">
@@ -512,6 +590,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <button class="sidebar-link" onclick="doLogout()">← Log Out</button>
     </div>
     <div class="main" id="generatorPanel">
+      <button class="mobile-menu-btn" onclick="openSidebar()"><div class="hb"><span></span><span></span><span></span></div> REPORT TYPE</button>
       <div class="mode-bar">
         <div class="mode-title" id="modeTitle">INCIDENT REPORT</div>
         <div class="mode-desc" id="modeDesc">Convert raw technician notes into a professional structured incident report</div>
@@ -557,6 +636,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
       </div>
     </div>
     <div class="main" id="historyPanel" style="display:none">
+      <button class="mobile-menu-btn" onclick="openSidebar()"><div class="hb"><span></span><span></span><span></span></div> REPORT TYPE</button>
       <div class="history-title">Report History</div>
       <div class="history-sub" id="historySubtitle">Your previously generated reports — saved to your account</div>
       <div id="historyList"></div>
@@ -1174,6 +1254,15 @@ function updateNav(screen){
 
 function goHome(){ if(currentUser) showScreen('app'); else showScreen('marketing'); }
 
+function openSidebar(){
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
 // ══════════════════════════════════════════════════════
 // AUTH — calls Netlify function, no passwords in browser
 // ══════════════════════════════════════════════════════
@@ -1375,6 +1464,7 @@ function setMode(btn, idx){
   document.getElementById('modeTitle').textContent = MODES[idx].title;
   document.getElementById('modeDesc').textContent  = MODES[idx].desc;
   document.getElementById('outWrap').classList.remove('vis');
+  closeSidebar();
   showGenerator();
 }
 
