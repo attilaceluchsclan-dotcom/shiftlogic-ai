@@ -3,10 +3,15 @@
 // Returns: industry, asset_type, report_type, fault_category, root_cause_status,
 //          safety_relevant, confidence
 //
+// Rate limits (per user per hour):
+//   Free plan:  10 generate attempts
+//   Pro plan:   60 generate attempts
+//
 // Required env vars:
 //   ANTHROPIC_API_KEY
 //   SUPABASE_URL
 //   SUPABASE_ANON_KEY
+//   SUPABASE_SERVICE_KEY
 
 const ANTHROPIC_URL      = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VER      = '2023-06-01';
@@ -62,7 +67,7 @@ exports.handler = async function(event) {
   }
   if (event.httpMethod !== 'POST') return errRes(405, 'Method Not Allowed');
 
-  const { ANTHROPIC_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
+  const { ANTHROPIC_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY } = process.env;
   if (!ANTHROPIC_API_KEY) return errRes(500, 'Server configuration error: missing API key.');
   if (!SUPABASE_URL)      return errRes(500, 'Server configuration error: missing database URL.');
 
@@ -72,6 +77,10 @@ exports.handler = async function(event) {
 
   const user = await verifyUser(token, SUPABASE_URL, SUPABASE_ANON_KEY || '');
   if (!user) return errRes(401, 'Session expired or invalid. Please log in again.');
+
+  // ── Rate limit ──
+  const rateLimitErr = await checkRateLimit(user.id, SUPABASE_URL, SUPABASE_SERVICE_KEY || SUPABASE_ANON_KEY || '');
+  if (rateLimitErr) return errRes(429, rateLimitErr);
 
   // ── Parse body ──
   let body;
@@ -153,6 +162,49 @@ exports.handler = async function(event) {
     body: JSON.stringify({ success: true, classification })
   };
 };
+
+// ─────────────────────────────────────────────────────────
+// RATE LIMIT
+// Counts reports saved in the last hour for this user.
+// Returns an error string if over limit, or null if OK.
+// ─────────────────────────────────────────────────────────
+
+const RATE_LIMIT_FREE = 10;   // max generate attempts per hour for free users
+const RATE_LIMIT_PRO  = 60;   // max generate attempts per hour for pro users
+
+async function checkRateLimit(userId, url, serviceKey) {
+  try {
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+
+    // Fetch profile (plan) + recent report count in parallel
+    const [profileRes, countRes] = await Promise.all([
+      fetch(`${url}/rest/v1/profiles?id=eq.${userId}&select=plan`, {
+        headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` }
+      }),
+      fetch(`${url}/rest/v1/reports?user_id=eq.${userId}&created_at=gt.${encodeURIComponent(oneHourAgo)}&select=id&limit=61`, {
+        headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` }
+      })
+    ]);
+
+    const profiles = await profileRes.json();
+    const recent   = await countRes.json();
+
+    const plan  = (Array.isArray(profiles) && profiles[0]?.plan) || 'free';
+    const count = Array.isArray(recent) ? recent.length : 0;
+    const limit = plan === 'pro' ? RATE_LIMIT_PRO : RATE_LIMIT_FREE;
+
+    if (count >= limit) {
+      const resetMins = 60;
+      return `Rate limit reached: ${limit} reports per hour on the ${plan} plan. Please wait up to ${resetMins} minutes before trying again.`;
+    }
+
+    return null; // OK
+  } catch (e) {
+    // Don't block the request if rate limit check fails — log and continue
+    console.warn('Rate limit check failed (non-blocking):', e.message);
+    return null;
+  }
+}
 
 // ─────────────────────────────────────────────────────────
 // HELPERS
