@@ -666,10 +666,11 @@ h2.sh em{font-style:italic;color:#F28C28;}
           <li>Report history &amp; archive</li>
           <li>Priority email support</li>
         </ul>
-        <div class="paypal-placeholder">
-          💳 PayPal subscription button will appear here<br>
-          <small style="color:#1a3a55">(Add PayPal Client ID to activate)</small>
-        </div>
+        <div class="auth-err" id="stripe-err" style="margin-top:8px"></div>
+        <button class="auth-submit" id="stripeBtn" onclick="startCheckout()" style="margin-top:8px;font-size:17px;padding:15px">
+          🔒 UPGRADE TO PRO — £29/mo
+        </button>
+        <p style="font-size:11px;color:#2d5a7a;margin-top:10px;text-align:center">Secure payment via Stripe. Cancel anytime.</p>
       </div>
       <div class="back-link" onclick="showScreen('app')">← Back to app</div>
     </div>
@@ -697,6 +698,7 @@ h2.sh em{font-style:italic;color:#F28C28;}
 // API key is NOT here. It lives in the Netlify environment variable
 // ANTHROPIC_API_KEY on the server. Never put it in this file.
 const AUTH_ENDPOINT        = '/.netlify/functions/auth';
+const STRIPE_ENDPOINT      = '/.netlify/functions/stripe-checkout';
 const CLASSIFY_ENDPOINT    = '/.netlify/functions/classify';
 const GENERATE_ENDPOINT    = '/.netlify/functions/generate';
 const VALIDATE_ENDPOINT    = '/.netlify/functions/validate';
@@ -1208,6 +1210,28 @@ window.onload = function(){
     });
   }
 
+  // Handle Stripe success redirect
+  if(window.location.search.includes('upgraded=true')){
+    window.history.replaceState(null,'',window.location.pathname);
+    const token = getStoredToken();
+    const user  = getStoredUser();
+    if(token && user){
+      authToken   = token;
+      currentUser = user;
+      currentUser.plan = 'pro'; // Stripe webhook handles DB update; update session optimistically
+      storeSession(authToken, currentUser);
+      enterApp();
+      setTimeout(()=>{
+        const infoDiv = document.createElement('div');
+        infoDiv.style.cssText='position:fixed;top:64px;left:50%;transform:translateX(-50%);background:#163A5F;border:1px solid #F28C28;border-radius:8px;padding:14px 24px;font-family:Barlow Condensed,sans-serif;font-size:15px;font-weight:700;color:#fff;z-index:9999;letter-spacing:.04em;';
+        infoDiv.textContent = '🎉 Welcome to Pro! Unlimited reports unlocked.';
+        document.body.appendChild(infoDiv);
+        setTimeout(()=>infoDiv.remove(),5000);
+      },400);
+      return;
+    }
+  }
+
   // Check for password recovery link (Supabase appends #access_token=...&type=recovery)
   if(window.location.hash){
     const params = Object.fromEntries(new URLSearchParams(window.location.hash.slice(1)));
@@ -1363,6 +1387,35 @@ async function doLogin(){
     err.classList.add('show');
     btn.disabled = false;
     btn.textContent = 'LOG IN →';
+  }
+}
+
+async function startCheckout(){
+  const btn = document.getElementById('stripeBtn');
+  const err = document.getElementById('stripe-err');
+  err.classList.remove('show');
+  btn.disabled = true;
+  btn.textContent = 'REDIRECTING TO PAYMENT…';
+  try {
+    const res  = await fetch(STRIPE_ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
+      body: JSON.stringify({})
+    });
+    const data = await res.json();
+    if(!data.success || !data.url){
+      err.textContent = data.error || 'Could not start checkout. Please try again.';
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = '🔒 UPGRADE TO PRO — £29/mo';
+      return;
+    }
+    window.location.href = data.url;
+  } catch(e){
+    err.textContent = 'Connection error. Please try again.';
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = '🔒 UPGRADE TO PRO — £29/mo';
   }
 }
 
