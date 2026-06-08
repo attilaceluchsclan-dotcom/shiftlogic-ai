@@ -446,7 +446,38 @@ h2.sh em{font-style:italic;color:#F28C28;}
       <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="you@company.com"></div>
       <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="Your password"></div>
       <button class="auth-submit" id="login-btn" onclick="doLogin()">LOG IN →</button>
-      <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
+      <p style="font-size:12px;color:#2d5a7a;margin-top:12px;text-align:center"><a onclick="showScreen('forgot')" style="color:#4a7a9b;cursor:pointer">Forgot your password?</a></p>
+      <p style="font-size:12px;color:#2d5a7a;margin-top:6px;text-align:center"><a onclick="showScreen('marketing')" style="color:#4a7a9b;cursor:pointer">← Back to homepage</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORGOT PASSWORD SCREEN ══ -->
+<div class="screen" id="screen-forgot">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Reset Password</div>
+      <p class="auth-sub">Enter your email and we'll send you a reset link.</p>
+      <div class="auth-err" id="forgot-err"></div>
+      <div class="auth-info" id="forgot-info"></div>
+      <div class="field"><label>Email Address</label><input type="email" id="forgot-email" placeholder="you@company.com"></div>
+      <button class="auth-submit" id="forgot-btn" onclick="doForgotPassword()">SEND RESET LINK →</button>
+      <p style="font-size:12px;color:#2d5a7a;margin-top:14px;text-align:center"><a onclick="showScreen('login')" style="color:#4a7a9b;cursor:pointer">← Back to login</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESET PASSWORD SCREEN ══ -->
+<div class="screen" id="screen-reset">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Set New Password</div>
+      <p class="auth-sub">Choose a new password for your account.</p>
+      <div class="auth-err" id="reset-err"></div>
+      <div class="auth-info" id="reset-info"></div>
+      <div class="field"><label>New Password</label><input type="password" id="reset-pass" placeholder="Min. 6 characters"></div>
+      <div class="field"><label>Confirm Password</label><input type="password" id="reset-pass2" placeholder="Repeat new password"></div>
+      <button class="auth-submit" id="reset-btn" onclick="doResetPassword()">SET NEW PASSWORD →</button>
     </div>
   </div>
 </div>
@@ -595,6 +626,7 @@ let currentUser = null;   // { id, name, email, plan, reportsUsed }
 let authToken   = null;   // JWT — stored in sessionStorage
 let currentMode = 0;
 let lastReportText = '';
+let recoveryToken  = null;  // set when user arrives from password reset email
 
 // In-memory cache for history loaded from the server this session
 let historyCache = null;
@@ -1091,6 +1123,17 @@ window.onload = function(){
     });
   }
 
+  // Check for password recovery link (Supabase appends #access_token=...&type=recovery)
+  if(window.location.hash){
+    const params = Object.fromEntries(new URLSearchParams(window.location.hash.slice(1)));
+    if(params.type === 'recovery' && params.access_token){
+      recoveryToken = params.access_token;
+      window.history.replaceState(null, '', window.location.pathname);
+      showScreen('reset');
+      return;
+    }
+  }
+
   // Restore session from sessionStorage
   const token = getStoredToken();
   const user  = getStoredUser();
@@ -1226,6 +1269,54 @@ async function doLogin(){
     err.classList.add('show');
     btn.disabled = false;
     btn.textContent = 'LOG IN →';
+  }
+}
+
+async function doForgotPassword(){
+  const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+  const err   = document.getElementById('forgot-err');
+  const info  = document.getElementById('forgot-info');
+  const btn   = document.getElementById('forgot-btn');
+  err.classList.remove('show');
+  info.classList.remove('show');
+  if(!email || !email.includes('@')){ err.textContent = 'Please enter a valid email address.'; err.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'SENDING…';
+  try {
+    const res  = await fetch(AUTH_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'forgot-password', email }) });
+    const data = await res.json();
+    info.textContent = data.message || 'Reset link sent. Check your inbox.';
+    info.classList.add('show');
+  } catch(e){
+    err.textContent = 'Connection error. Please try again.';
+    err.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'SEND RESET LINK →';
+}
+
+async function doResetPassword(){
+  const pass  = document.getElementById('reset-pass').value;
+  const pass2 = document.getElementById('reset-pass2').value;
+  const err   = document.getElementById('reset-err');
+  const info  = document.getElementById('reset-info');
+  const btn   = document.getElementById('reset-btn');
+  err.classList.remove('show');
+  info.classList.remove('show');
+  if(!pass || pass.length < 6){ err.textContent = 'Password must be at least 6 characters.'; err.classList.add('show'); return; }
+  if(pass !== pass2){ err.textContent = 'Passwords do not match.'; err.classList.add('show'); return; }
+  if(!recoveryToken){ err.textContent = 'Reset token missing. Please use the link from your email.'; err.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'SAVING…';
+  try {
+    const res  = await fetch(AUTH_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'reset-password', access_token: recoveryToken, password: pass }) });
+    const data = await res.json();
+    if(!data.success){ err.textContent = data.error || 'Reset failed. Please request a new link.'; err.classList.add('show'); btn.disabled=false; btn.textContent='SET NEW PASSWORD →'; return; }
+    info.textContent = 'Password updated! Redirecting to login…';
+    info.classList.add('show');
+    recoveryToken = null;
+    setTimeout(() => showScreen('login'), 2000);
+  } catch(e){
+    err.textContent = 'Connection error. Please try again.';
+    err.classList.add('show');
+    btn.disabled = false; btn.textContent = 'SET NEW PASSWORD →';
   }
 }
 

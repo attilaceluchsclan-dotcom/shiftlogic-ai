@@ -25,10 +25,12 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e){ return errRes(400, 'Invalid JSON body.'); }
 
-  if(body.action === 'signup')  return handleSignup(body, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY);
-  if(body.action === 'login')   return handleLogin(body, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY);
+  if(body.action === 'signup')          return handleSignup(body, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY);
+  if(body.action === 'login')           return handleLogin(body, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY);
+  if(body.action === 'forgot-password') return handleForgotPassword(body, SUPABASE_URL, SUPABASE_ANON_KEY);
+  if(body.action === 'reset-password')  return handleResetPassword(body, SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  return errRes(400, 'Invalid action. Use "signup" or "login".');
+  return errRes(400, 'Invalid action.');
 };
 
 // ─────────────────────────────────────────────────────────
@@ -163,6 +165,51 @@ async function handleLogin(body, url, anonKey, serviceKey){
       reportsUsed: profile.reports_used || 0
     }
   });
+}
+
+// ─────────────────────────────────────────────────────────
+// FORGOT PASSWORD
+// ─────────────────────────────────────────────────────────
+async function handleForgotPassword(body, url, anonKey){
+  const { email } = body;
+  if(!email) return errRes(400, 'Please provide an email address.');
+
+  // Call Supabase recovery endpoint — always return success to avoid email enumeration
+  await fetch(`${url}/auth/v1/recover`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': anonKey },
+    body: JSON.stringify({ email })
+  });
+
+  return okRes({ message: 'If an account exists for that email, a password reset link has been sent.' });
+}
+
+// ─────────────────────────────────────────────────────────
+// RESET PASSWORD
+// ─────────────────────────────────────────────────────────
+async function handleResetPassword(body, url, anonKey){
+  const { access_token, password } = body;
+  if(!access_token) return errRes(400, 'Missing reset token. Please use the link from your email.');
+  if(!password || password.length < 6) return errRes(400, 'Password must be at least 6 characters.');
+
+  const res  = await fetch(`${url}/auth/v1/user`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': anonKey,
+      'Authorization': `Bearer ${access_token}`
+    },
+    body: JSON.stringify({ password })
+  });
+
+  const data = await res.json();
+
+  if(!res.ok || data.error){
+    const msg = data.error?.message || 'Password reset failed. The link may have expired — please request a new one.';
+    return errRes(400, msg);
+  }
+
+  return okRes({ message: 'Password updated. You can now log in with your new password.' });
 }
 
 // ─────────────────────────────────────────────────────────
