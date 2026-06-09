@@ -1980,7 +1980,7 @@ async function generate(){
     });
 
     // ── Capture report ID for sharing ────────────────
-    if(saved && saved.report_id) lastReportId = saved.report_id;
+    if(saved && saved.reportId) lastReportId = saved.reportId;
 
     // ── Render output ────────────────────────────────
     renderOutput(finalText);
@@ -2123,6 +2123,7 @@ async function loadFromHistory(reportId){
 
     renderOutput(h.report_text);
     document.getElementById('outWrap').classList.add('vis');
+    lastReportId = reportId;  // enable Share button for this report
     showGenerator();
 
   } catch(e){

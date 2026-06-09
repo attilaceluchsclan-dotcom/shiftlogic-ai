@@ -25,7 +25,7 @@ exports.handler = async function(event){
   }
 
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/reports?share_token=eq.${encodeURIComponent(shareToken)}&select=id,report_type,report_text,created_at,site,shift,technician,industry,asset_name`,
+    `${SUPABASE_URL}/rest/v1/reports?share_token=eq.${encodeURIComponent(shareToken)}&select=id,report_type,report_text,created_at,site,shift,technician,classification`,
     {
       headers: {
         'apikey':        SUPABASE_SERVICE_KEY,
@@ -39,7 +39,32 @@ exports.handler = async function(event){
     return errRes(404,'Report not found or link has expired.');
   }
 
-  const report = rows[0];
+  const row = rows[0];
+
+  // Extract industry and asset_type from classification JSON (they are not top-level columns)
+  let industry  = null;
+  let assetType = null;
+  if(row.classification){
+    try {
+      const cl = typeof row.classification === 'string'
+        ? JSON.parse(row.classification)
+        : row.classification;
+      industry  = cl.industry  || null;
+      assetType = cl.asset_type || null;
+    } catch(e) { /* ignore malformed classification */ }
+  }
+
+  const report = {
+    id:           row.id,
+    report_type:  row.report_type,
+    report_text:  row.report_text,
+    created_at:   row.created_at,
+    site:         row.site,
+    shift:        row.shift,
+    technician:   row.technician,
+    industry,
+    asset_type:   assetType
+  };
 
   return {
     statusCode: 200,
